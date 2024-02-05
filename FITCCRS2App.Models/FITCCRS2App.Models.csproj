@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SearchObjects\" />
+    <None Remove="Models\" />
+    <None Remove="RequestObjects\" />
+    <None Remove="Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SearchObjects\" />
+    <Folder Include="Models\" />
+    <Folder Include="RequestObjects\" />
+    <Folder Include="Enums\" />
+  </ItemGroup>
+</Project>
