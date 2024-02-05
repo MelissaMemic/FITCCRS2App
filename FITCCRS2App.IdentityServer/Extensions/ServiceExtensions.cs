@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FITCCRS2App.Services;
-using HRMS.IdentityServer.Extensions;
+using FITCCRS2App.IdentityServer.Extensions;
 using Serilog;
 
-namespace HRMS.IdentityServer.Extensions;
+namespace FITCCRS2App.IdentityServer.Extensions;
 
 public static class ServiceExtensions
 {

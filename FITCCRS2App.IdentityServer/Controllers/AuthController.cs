@@ -6,7 +6,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 
-namespace HRMS.IdentityServer.Controllers;
+namespace FITCCRS2App.IdentityServer.Controllers;
 
 [ApiController]
 [Route("[action]")]

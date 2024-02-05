@@ -1,6 +1,5 @@
 ﻿//using Serilog;
 
-//namespace HRMS.Extensions;
 
 //public static class SerilogExtensions
 //{

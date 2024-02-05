@@ -5,8 +5,7 @@ using FITCCRS2App.Services.Services.AgendaService;
 using FITCCRS2App.Services.Services.BaseServices;
 using FITCCRS2App.Services.Services.TakmicenjeService;
 using FITCCRS2App.Services.Services.UserService;
-using HRMS.IdentityServer.Extensions;
-//using HRMS.RabbitMQ.Extensions;
+using FITCCRS2App.IdentityServer.Extensions;
 using IdentityServer4.Models;
 using Microsoft.EntityFrameworkCore;
 

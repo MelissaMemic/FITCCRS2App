@@ -4,7 +4,6 @@
 //using System.Runtime.CompilerServices;
 //using System.Text;
 
-//namespace HRMS.Extensions;
 
 //public static class ExceptionExtensions
 //{
