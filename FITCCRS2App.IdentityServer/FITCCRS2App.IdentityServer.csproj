@@ -15,9 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HRMS.Core\HRMS.Core.csproj" />
-    <ProjectReference Include="..\HRMS.Database\HRMS.Database.csproj" />
-    <ProjectReference Include="..\HRMS.RabbitMQ\HRMS.RabbitMQ.csproj" />
     <ProjectReference Include="..\FITCCRS2App.Models\FITCCRS2App.Models.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
