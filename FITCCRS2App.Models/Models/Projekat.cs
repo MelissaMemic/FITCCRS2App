@@ -1,9 +1,7 @@
-﻿using System;
-namespace FITCCRS2App.Models.Models
+﻿namespace FITCCRS2App.Models.Models
 {
-	public class Projekat
+    public class Projekat
 	{
-
         public int ProjekatId { get; set; }
         public string Naziv { get; set; } = null!;
         public string Opis { get; set; } = null!;
@@ -12,7 +10,6 @@ namespace FITCCRS2App.Models.Models
 
         public virtual Kategorija Kategorija { get; set; } = null!;
         public virtual Tim Tim { get; set; } = null!;
-        //public virtual ICollection<Rezultat> Rezultats { get; set; }
     }
 }
 

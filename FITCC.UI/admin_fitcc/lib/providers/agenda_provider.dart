@@ -3,7 +3,7 @@ import 'package:admin_fitcc/models/agenda.dart';
 import 'base_provider.dart';
 
 class AgendaProvider extends BaseProvider<Agenda> {
-  AgendaProvider() : super("api/Agenda");
+  AgendaProvider() : super("Agenda");
 
   @override
   Agenda fromJson(data) {

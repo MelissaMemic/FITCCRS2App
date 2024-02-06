@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FITCCRS2App.Services.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -233,7 +233,7 @@ namespace FITCCRS2App.Services.Migrations
                     ime = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     prezime = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     kategorijaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -323,7 +323,7 @@ namespace FITCCRS2App.Services.Migrations
                     UserRoleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -502,11 +502,11 @@ namespace FITCCRS2App.Services.Migrations
                 columns: new[] { "UserId", "BirthDate", "CitizenshipId", "CityId", "CreateDate", "Email", "FirstName", "Gender", "Image", "LastName", "Password", "Phone", "Username", "WebSite" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4540), 1, 1, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4500), "mellimostar@gmail.com", "Melissa", 1, "", "Memic", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "meli", "http://google.com" },
-                    { 2, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4560), 1, 2, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4560), "lamija.babovic@edu.fit.ba", "lamija", 1, "", "Babovic", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "lamija", "http://google.com" },
-                    { 3, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4580), 1, 2, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4580), "ziri@gmail.com", "Ziri", 1, "", "Ziri", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "ziri", "http://google.com" },
-                    { 4, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4600), 1, 3, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4590), "bablamija@gmail.com", "lamija", 1, "", "Bab", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "bablamija", "http://google.com" },
-                    { 5, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4610), 1, 1, new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4610), "sponzor@gmail.com", "Sponzor", 0, "", "Sponzor", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "sponzor", "http://google.com" }
+                    { 1, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5530), 1, 1, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5490), "mellimostar@gmail.com", "Melissa", 1, "", "Memic", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "meli", "http://google.com" },
+                    { 2, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5550), 1, 2, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5550), "lamija.babovic@edu.fit.ba", "lamija", 1, "", "Babovic", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "lamija", "http://google.com" },
+                    { 3, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5570), 1, 2, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5570), "ziri@gmail.com", "Ziri", 1, "", "Ziri", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "ziri", "http://google.com" },
+                    { 4, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5590), 1, 3, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5580), "bablamija@gmail.com", "lamija", 1, "", "Bab", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "bablamija", "http://google.com" },
+                    { 5, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5600), 1, 1, new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5600), "sponzor@gmail.com", "Sponzor", 0, "", "Sponzor", "19a2854144b63a8f7617a6f225019b12", "+333 22 3 332", "sponzor", "http://google.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -528,11 +528,11 @@ namespace FITCCRS2App.Services.Migrations
                 columns: new[] { "UserRoleId", "Role", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Admin", 1 },
-                    { 2, "Admin", 2 },
-                    { 3, "Ziri", 3 },
-                    { 4, "Takmicar", 4 },
-                    { 5, "Sponzor", 5 }
+                    { 1, 0, 1 },
+                    { 2, 0, 2 },
+                    { 3, 1, 3 },
+                    { 4, 2, 4 },
+                    { 5, 3, 5 }
                 });
 
             migrationBuilder.CreateIndex(

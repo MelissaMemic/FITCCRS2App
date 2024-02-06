@@ -34,18 +34,17 @@ class _ProjekatListState extends State<ProjekatList> {
     }
   }
 
-  Future<void> _fetchKategorijeOptions() async {
+ Future<void> _fetchKategorijeOptions() async {
     try {
-      List<Kategorija> fetchedKategorijeOptions =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeOptions =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeOptions.addAll(fetchedKategorijeOptions);
+        kategorijeOptions=fetchedKategorijeOptions.result;
       });
     } catch (e) {
       print('Error fetching Kategorije options: $e');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     List<Projekat> filteredProjektiList = projektiList

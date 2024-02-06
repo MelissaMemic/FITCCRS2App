@@ -1,9 +1,13 @@
+import 'package:admin_fitcc/models/agenda.dart';
 import 'package:admin_fitcc/models/dogadjajagenda.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
+import 'package:admin_fitcc/providers/agenda_provider.dart';
 import 'package:admin_fitcc/providers/dogadjaj_provider.dart';
 import 'package:admin_fitcc/providers/dogadjajiperagenda_provider.dart';
 import 'package:admin_fitcc/screens/agendum/dogadjaj_add.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DogadjajList extends StatefulWidget {
   @override
@@ -11,21 +15,23 @@ class DogadjajList extends StatefulWidget {
 }
 
 class _DogadjajListState extends State<DogadjajList> {
-  List<DogadjajiPerAgenda> dogadjajList = [];
+  List<Agenda> _lista = [];
 
   @override
   void initState() {
     super.initState();
+
     _fetchDogadjajPerAgendaData();
   }
 
   Future<void> _fetchDogadjajPerAgendaData() async {
     try {
-      List<DogadjajiPerAgenda> fetchedDogadjajList =
-          await DogadjajPerAgendaProvider().fetchDogadjajperAgendaList();
+      PagedResult<Agenda> fetchedlist =
+          await AgendaProvider().get();
       setState(() {
-        dogadjajList = fetchedDogadjajList;
+        _lista = fetchedlist.result;
       });
+      
     } catch (e) {
       print('Error fetching List data: $e');
     }
@@ -52,23 +58,23 @@ class _DogadjajListState extends State<DogadjajList> {
               columns: [
                 DataColumn(label: Text('Dan')),
                 DataColumn(label: Text('Naziv')),
-                DataColumn(label: Text('Trajanje')),
-                DataColumn(label: Text('Pocetak')),
-                DataColumn(label: Text('Kraj')),
+                // DataColumn(label: Text('Trajanje')),
+                // DataColumn(label: Text('Pocetak')),
+                // DataColumn(label: Text('Kraj')),
                 DataColumn(label: Text('')),
                 DataColumn(label: Text('')),
               ],
-              rows: dogadjajList.map((dogadjaj) {
+              rows: _lista.map((dogadjaj) {
                 return DataRow(cells: [
                   DataCell(Text(dogadjaj.dan.toString())),
-                  DataCell(Text(dogadjaj.naziv)),
-                  DataCell(Text(dogadjaj.trajanje.toString())),
-                  DataCell(Text(_formatDate(dogadjaj.pocetak))),
-                  DataCell(Text(_formatDate(dogadjaj.kraj))),
+                  DataCell(Text(dogadjaj.agendaId.toString())),
+                  // DataCell(Text(dogadjaj.trajanje.toString())),
+                  // DataCell(Text(_formatDate(dogadjaj.pocetak))),
+                  // DataCell(Text(_formatDate(dogadjaj.kraj))),
                   DataCell(
                     ElevatedButton(
                       onPressed: () {
-                        _editDogadjaj(dogadjaj);
+                        // _editDogadjaj(dogadjaj);
                       },
                       child: Text('Uredi'),
                     ),
@@ -76,7 +82,7 @@ class _DogadjajListState extends State<DogadjajList> {
                   DataCell(
                     ElevatedButton(
                       onPressed: () {
-                        _deleteDogadjaj(dogadjaj.dogadjajId); 
+                        // _deleteDogadjaj(dogadjaj.dogadjajId); 
                       },
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       child: Text('Izbrisi'),

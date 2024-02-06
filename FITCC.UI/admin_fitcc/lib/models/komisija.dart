@@ -12,7 +12,6 @@ class Komisija {
   String prezime;
   String email;
   UlogeKomisije role; 
-  Kategorija? kategorija; 
 
   Komisija(
      this.komisijaId,
@@ -20,7 +19,6 @@ class Komisija {
     this.prezime ,
     this.email ,
     this.role , 
-     this.kategorija, 
      this.kategorijaId, 
   );
 

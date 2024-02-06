@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using FITCCRS2App.Models.Helpers;
 using FITCCRS2App.Models.RequestObjects;
 using FITCCRS2App.Models.SearchObjects;
@@ -13,6 +14,8 @@ namespace FITCCRS2App.Services.Services.UserService
 
         public UserService(FITCCRS2v2Context context, IMapper mapper) : base(context, mapper)
         {
+            _context = context;
+            _mapper = mapper;
         }
         public async Task<Models.Models.User> GetByEmailAndPasswordAsync(string email, string password)
         {
@@ -24,8 +27,7 @@ namespace FITCCRS2App.Services.Services.UserService
                     x.Password == EncryptionHelpers.Hash(password)
                 );
 
-            return Mapper.Map<Models.Models.User>(user);
+            return _mapper.Map<Models.Models.User>(user);
         }
-
     }
 }

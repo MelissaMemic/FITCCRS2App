@@ -7,12 +7,14 @@ part 'agenda.g.dart';
 class Agenda {
   int agendaId;
   int? dan;
-  Takmicenje? takmicenje; 
+  int? takmicenjeId;
+  dynamic takmicenje; 
 
   Agenda(
      this.agendaId,
     this.dan,
    this.takmicenje, 
+   this.takmicenjeId, 
   );
 
   factory Agenda.fromJson(Map<String, dynamic> json) => _$AgendaFromJson(json);

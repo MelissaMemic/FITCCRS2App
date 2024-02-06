@@ -7,18 +7,35 @@ namespace FITCCRS2App.Services
     {
         public MappingProfile()
         {
-            CreateMap<Database.Agendum, Models.Models.Agenda>();
-            CreateMap<AgendaUpsertRequest, Database.Agendum>();
+            CreateMap<Database.Agendum, Models.Models.Agenda>().ReverseMap();
+            CreateMap<Database.City, Models.Models.City>();
+            CreateMap<Database.Country, Models.Models.Country>();
 
-            CreateMap<Database.Takmicenje, Models.Models.Takmicenje>();
-            CreateMap<TakmicenjeUpsertRequest, Database.Takmicenje>();
-
+            CreateMap<Database.Dogadjaj, Models.Models.Dogadjaj>();
             CreateMap<Database.Kategorija, Models.Models.Kategorija>();
-            CreateMap<Database.Tim, Models.Models.Tim>();
+            CreateMap<Database.Komisija, Models.Models.Komisija>();
+            CreateMap<Database.Kriterij, Models.Models.Kriterij>();
+
+            CreateMap<Database.Napomena, Models.Models.Napomena>();
+            CreateMap<Database.Predavac, Models.Models.Predavac>();
+            CreateMap<Database.PredavacDogadjaj, Models.Models.PredavacDogadjaj>();
             CreateMap<Database.Projekat, Models.Models.Projekat>();
-            //CreateMap<Database.User, Models.Models.User>();
+
+            CreateMap<Database.Rezultat, Models.Models.Rezultat>()
+                .ForMember(x => x.ProjekatId, opt => opt.MapFrom((src, dest) => src.Projekat?.ProjekatId))
+                .ForMember(dest => dest.Projekat, opt => opt.MapFrom(src => src.Projekat))
+                .ForMember(dest => dest.Bod, opt => opt.MapFrom(src => src.Bod))
+                .ForMember(dest => dest.RezultatId, opt => opt.MapFrom(src => src.RezultatId))
+                .ForMember(dest => dest.Napomena, opt => opt.MapFrom(src => src.Napomena));
+
+            CreateMap<Database.Skategorije, Models.Models.SKategorije>();
+            CreateMap<Database.Sponzor, Models.Models.Sponzor>();
+            CreateMap<Database.Takmicenje, Models.Models.Takmicenje>();
+            CreateMap<Database.Tim, Models.Models.Tim>();
+            CreateMap<AgendaUpsertRequest, Database.Agendum>();
+            CreateMap<TakmicenjeUpsertRequest, Database.Takmicenje>();
             CreateMap<Database.User, Models.Models.User>()
-    .ForMember(x => x.Roles, opt => opt.MapFrom(y => y.Roles.Select(z => z.Role)));
+                .ForMember(x => x.Roles, opt => opt.MapFrom(y => y.Roles.Select(z => z.Role)));
 
             CreateMap<Models.Models.User, Database.User>()
                 .ForMember(x => x.CityId, opt => opt.MapFrom((src, dest) => src.City?.CityId))
@@ -27,9 +44,9 @@ namespace FITCCRS2App.Services
                 .ForMember(x => x.Citizenship, opt => opt.Ignore());
 
             CreateMap<Database.UserRole, Models.Models.UserRole>();
+
             CreateMap<Models.Models.UserRole, Database.UserRole>()
                 .ForMember(x => x.UserId, opt => opt.MapFrom(y => y.User.UserId))
-                .ForMember(x => x.Role, opt => opt.MapFrom(y => y.User.UserId))
                 .ForMember(x => x.User, opt => opt.Ignore());
 
         }

@@ -7,15 +7,13 @@ class Kriterij {
   int kriterijId;
    String naziv;
    String vrijednost;
-   Kriterij kategorija;
    int kategorijaId;
 
   Kriterij(
     this.kriterijId,
     this.naziv,
     this.vrijednost,
-    this.kategorijaId,
-    this.kategorija);
+    this.kategorijaId);
 
   factory Kriterij.fromJson(Map<String, dynamic> json) => _$KriterijFromJson(json);
   Map<String, dynamic> toJson() => _$KriterijToJson(this);

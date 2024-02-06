@@ -1,7 +1,6 @@
-﻿using System;
-namespace FITCCRS2App.Models.Models
+﻿namespace FITCCRS2App.Models.Models
 {
-	public class Kategorija
+    public class Kategorija
 	{
         public int KategorijaId { get; set; }
         public string? Naziv { get; set; }
@@ -11,4 +10,3 @@ namespace FITCCRS2App.Models.Models
         public virtual Takmicenje? Takmicenje { get; set; }
     }
 }
-

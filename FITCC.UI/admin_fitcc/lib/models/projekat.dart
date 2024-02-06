@@ -12,17 +12,14 @@ class Projekat {
     String opis;
     int kategorijaId;
     int timId;
-    Kategorija kategorija; 
-    Tim tim; 
 
   Projekat(
      this.projekatId,
      this.naziv,
      this.opis,
      this.kategorijaId,
-     this.timId,
-     this.kategorija,
-     this.tim,  );
+     this.timId
+       );
 
   factory Projekat.fromJson(Map<String, dynamic> json) => _$ProjekatFromJson(json);
   Map<String, dynamic> toJson() => _$ProjekatToJson(this);

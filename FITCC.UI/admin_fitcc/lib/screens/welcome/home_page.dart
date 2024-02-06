@@ -1,3 +1,5 @@
+import 'package:admin_fitcc/models/auth_user.dart';
+import 'package:admin_fitcc/models/enums/role.dart';
 import 'package:admin_fitcc/screens/agendum/agendum.dart';
 import 'package:admin_fitcc/screens/komisija/komisija_list.dart';
 import 'package:admin_fitcc/screens/kriteriji/kriteriji_list.dart';
@@ -61,6 +63,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+           if (AuthUser.roles.contains("Admin"))
             ListTile(
               title: Text('Komisija'),
               onTap: () {
@@ -70,6 +73,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+           if (AuthUser.roles.contains("Admin"))
             ListTile(
               title: Text('Projekti'),
               onTap: () {
@@ -79,6 +83,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+           if (AuthUser.roles.contains("Admin"))
             ListTile(
               title: Text('Agendum'),
               onTap: () {
@@ -88,6 +93,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+            if (AuthUser.roles.contains("Admin"))
             ListTile(
               title: Text('Timovi'),
               onTap: () {
@@ -97,6 +103,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+            if (AuthUser.roles.contains("Admin"))
             ListTile(
               title: Text('Kriteriji'),
               onTap: () {
@@ -106,6 +113,7 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
+            if (AuthUser.roles.contains("Admin"))
             ListTile(
               title: Text('Rezultati'),
               onTap: () {

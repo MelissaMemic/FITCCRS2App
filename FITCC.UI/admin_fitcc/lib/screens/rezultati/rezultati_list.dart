@@ -1,4 +1,5 @@
 import 'package:admin_fitcc/models/kategorija.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
 import 'package:admin_fitcc/models/projekat.dart';
 import 'package:admin_fitcc/models/rezultat.dart';
 import 'package:admin_fitcc/providers/rezultat_provider.dart';
@@ -26,10 +27,10 @@ class _RezultatiListState extends State<RezultatiList> {
 
   Future<void> _fetchRezultatiData() async {
     try {
-      List<Rezultat> fetchedRezultatiList =
-          await RezultatProvider().getAllRezultati();
+      PagedResult<Rezultat> fetchedRezultatiList =
+          await RezultatProvider().get();
       setState(() {
-        rezultatiList = fetchedRezultatiList;
+        rezultatiList = fetchedRezultatiList.result;
       });
     } catch (e) {
       print('Error fetching Rezultati data: $e');
@@ -38,10 +39,10 @@ class _RezultatiListState extends State<RezultatiList> {
 
   Future<void> _fetchKategorijeOptions() async {
     try {
-      List<Kategorija> fetchedKategorijeOptions =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeOptions =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeOptions.addAll(fetchedKategorijeOptions);
+        kategorijeOptions=fetchedKategorijeOptions.result;
       });
     } catch (e) {
       print('Error fetching Kategorije options: $e');

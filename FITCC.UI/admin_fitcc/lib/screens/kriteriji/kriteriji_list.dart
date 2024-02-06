@@ -31,16 +31,16 @@ class _KriterijiListState extends State<KriterijiList> {
         kriterijiList = fetchedKriterijiList.result;
       });
     } catch (e) {
-      print('Error fetching Komisija data: $e');
+      print('Error fetching Kriteriji data: $e');
     }
   }
 
   Future<void> _fetchKategorijeOptions() async {
     try {
-      List<Kategorija> fetchedKategorijeOptions =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeOptions =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeOptions.addAll(fetchedKategorijeOptions);
+        kategorijeOptions=fetchedKategorijeOptions.result;
       });
     } catch (e) {
       print('Error fetching Kategorije options: $e');

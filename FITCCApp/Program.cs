@@ -8,15 +8,29 @@ using FITCCRS2App.Services.Services.TakmicenjeService;
 using FITCCApp.Extensions;
 using Microsoft.EntityFrameworkCore;
 using FITCCRS2App.Services.Services.UserService;
+using Serilog;
+using FITCCRS2App.Services;
+using FITCCRS2App.Services.Services.KriterijService;
+using FITCCRS2App.Services.Services.KomisijaService;
+using FITCCRS2App.Services.Services.KategorijaService;
+using FITCCRS2App.Services.Services.ProjekatService;
+using FITCCRS2App.Services.Services.RezultatService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAutoMapper(typeof(IAgendaService));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FITCCRS2v2Context>(options =>
     options.UseSqlServer(connectionString));
+
+Log.Logger = new LoggerConfiguration()
+            .ReadFrom
+            .Configuration(builder.Configuration)
+            .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddMemoryCache();
 
@@ -25,6 +39,11 @@ builder.Services.AddTransient<IService<FITCCRS2App.Models.Models.Takmicenje, Bas
     , Takmicenje, BaseSearchObject>>();
 builder.Services.AddTransient<ITakmicenjeService, TakmicenjeService>();
 builder.Services.AddTransient<IAgendaService, AgendaService>();
+builder.Services.AddTransient<IKriterijService, KriterijService>();
+builder.Services.AddTransient<IKomisijaService, KomisijaService>();
+builder.Services.AddTransient<IKategorijaService, KategorijaService>();
+builder.Services.AddTransient<IProjekatService, ProjekatService>();
+builder.Services.AddTransient<IRezultatService, RezultatService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 //builder.Services.AddScopedServices();

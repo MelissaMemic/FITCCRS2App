@@ -21,8 +21,8 @@ namespace FITCCApp.Controllers
             _service = service;
         }
 
-        [HttpGet()]
-        public async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
+        [HttpGet]
+        public virtual async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
         {
             return await _service.Get(search);
         }

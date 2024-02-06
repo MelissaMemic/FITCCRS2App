@@ -1,3 +1,4 @@
+import 'package:admin_fitcc/models/auth_user.dart';
 import 'package:admin_fitcc/providers/auth_provider.dart';
 import 'package:admin_fitcc/utils/constraints.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
       Navigator.pushNamed(context, '/homePage');
+
     } on Exception catch (e) {
       final snackBar = SnackBar(
         content: Text(e.toString()),

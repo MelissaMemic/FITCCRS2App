@@ -23,6 +23,11 @@
     <None Remove="Services\BaseServices\" />
     <None Remove="Services\TakmicenjeService\" />
     <None Remove="Services\UserService\" />
+    <None Remove="Services\KriterijService\" />
+    <None Remove="Services\KomisijaService\" />
+    <None Remove="Services\KategorijaService\" />
+    <None Remove="Services\ProjekatService\" />
+    <None Remove="Services\RezultatService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -30,6 +35,11 @@
     <Folder Include="Services\BaseServices\" />
     <Folder Include="Services\TakmicenjeService\" />
     <Folder Include="Services\UserService\" />
+    <Folder Include="Services\KriterijService\" />
+    <Folder Include="Services\KomisijaService\" />
+    <Folder Include="Services\KategorijaService\" />
+    <Folder Include="Services\ProjekatService\" />
+    <Folder Include="Services\RezultatService\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FITCCRS2App.Models\FITCCRS2App.Models.csproj" />

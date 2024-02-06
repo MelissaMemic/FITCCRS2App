@@ -45,6 +45,12 @@ namespace FITCCRS2App.Services.Services.BaseServices
 
         public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query, TSearch? search = null)
         {
+            if (typeof(TDb) == typeof(Database.Rezultat))
+            {
+                var specificQuery = query as IQueryable<Database.Rezultat>;
+                specificQuery = specificQuery.Include(x => x.Projekat); 
+                return specificQuery as IQueryable<TDb>;
+            }
             return query;
         }
 

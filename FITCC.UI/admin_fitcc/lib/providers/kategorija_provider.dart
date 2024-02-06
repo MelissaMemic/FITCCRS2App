@@ -7,7 +7,7 @@ import '../models/kategorija.dart';
 import 'base_provider.dart';
 
 class KategorijaProvider extends BaseProvider<Kategorija> {
-  KategorijaProvider() : super("api/Kategorija");
+  KategorijaProvider() : super("Kategorija");
   LoginService _loginService = LoginService();
 
   @override

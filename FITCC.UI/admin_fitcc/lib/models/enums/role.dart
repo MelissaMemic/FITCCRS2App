@@ -2,11 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 enum Role {
   @JsonValue(0)
-  admin,
+  Admin,
   @JsonValue(1)
-  ziri,
+  Ziri,
   @JsonValue(2)
-  takmicar,
+  Takmicar,
   @JsonValue(3)
-  sponzor
+  Sponzor
 }

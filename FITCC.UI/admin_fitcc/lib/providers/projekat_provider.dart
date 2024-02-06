@@ -3,7 +3,7 @@ import 'package:admin_fitcc/models/projekat.dart';
 import 'base_provider.dart';
 
 class ProjekatProvider extends BaseProvider<Projekat> {
-  ProjekatProvider() : super("api/Projekat");
+  ProjekatProvider() : super("Projekat");
 
   @override
   Projekat fromJson(data) {

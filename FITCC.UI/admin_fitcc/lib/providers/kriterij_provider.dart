@@ -3,7 +3,7 @@ import 'package:admin_fitcc/models/kriterij.dart';
 import 'base_provider.dart';
 
 class KriterijProvider extends BaseProvider<Kriterij> {
-  KriterijProvider() : super("api/Kriterij");
+  KriterijProvider() : super("Kriteriji");
 
   @override
   Kriterij fromJson(data) {

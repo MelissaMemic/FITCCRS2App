@@ -20,14 +20,55 @@ abstract class BaseProvider<T> with ChangeNotifier {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://localhost:7247");
 
-    if (_baseUrl!.endsWith("/") == false) {
-      _baseUrl = _baseUrl! + "/";
+    if (_baseUrl.endsWith("/") == false) {
+      _baseUrl = _baseUrl + "/";
     }
 
     _endpoint = endpoint;
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
+
+    //     _baseUrl = const String.fromEnvironment(
+    //   "ApiUrl",
+    //   defaultValue: "localhost:7247",
+    // );
+    // _endpoint = endpoint ?? T.toString();
+
   }
+  Future<PagedResult<T>> getAll([dynamic search]) async {
+    var url = "$_baseUrl$_endpoint";
+
+    if (search != null) {
+      String queryString = getQueryString(search);
+      url = url + "?" + queryString;
+    }
+
+    var uri = Uri.parse(url);
+
+    Map<String, String> headers = getHeaders();
+
+    var response = await http!.get(uri, headers: headers);
+
+    if (isValidResponseCode(response)) {
+      var data = jsonDecode(response.body);
+
+      var result = PagedResult<T>();
+
+      result.totalCount = data['totalCount'];
+      result.totalPages = data['totalPages'];
+      result.page = data['page'];
+      result.pageSize = data['pageSize'];
+
+      for (var item in data['result']) {
+        result.result.add(fromJson(item));
+      }
+
+      return result;
+    } else {
+      throw Exception("Response is not valid");
+    }
+  }
+
 Future<void> delete(int id) async {
     try {
       _loginService.verifySession();
@@ -61,24 +102,19 @@ Future<T> getById(int id, [dynamic additionalData]) async {
   }
 }
 
-
   Future<PagedResult<T>> get([dynamic search]) async {
-
-
- final Map<String, String> queryParameters = {};
+    var url = "$_baseUrl$_endpoint";
 
     if (search != null) {
-      search.toJson().forEach((key, value) {
-        queryParameters.addAll(<String, String>{key: value.toString()});
-      });
-
-      queryParameters.removeWhere((key, value) => value == "null");
+      String queryString = getQueryString(search);
+      url = url + "?" + queryString;
     }
 
-    var uri = Uri.https(_baseUrl, _endpoint, queryParameters);
+    var uri = Uri.parse(url);
 
-    var response = await http!.get(uri, headers: getHeaders());
+    Map<String, String> headers = getHeaders();
 
+    var response = await http!.get(uri, headers: headers);
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
 
@@ -92,33 +128,12 @@ Future<T> getById(int id, [dynamic additionalData]) async {
       for (var item in data['result']) {
         result.result.add(fromJson(item));
       }
-
       return result;
     } else {
       throw Exception("Response is not valid");
     }
-
-
-    // _loginService.verifySession();
-    // var url = "$_baseUrl$_endpoint";
-
-    // if (search != null) {
-    //   String queryString = getQueryString(search);
-    //   url = url + "?" + queryString;
-    // }
-
-    // var uri = Uri.parse(url);
-
-    // Map<String, String> headers = createHeaders();
-    // var response = await http!.get(uri, headers: headers);
-
-    // if (isValidResponseCode(response)) {
-    //   var data = jsonDecode(response.body);
-    //   return data.map((x) => fromJson(x)).cast<T>().toList();
-    // } else {
-    //   throw Exception("Dogodila se greska");
-    // }
   }
+
 Future<T?> insert(dynamic request) async {
    _loginService.verifySession();
     var url = "$_baseUrl$_endpoint";

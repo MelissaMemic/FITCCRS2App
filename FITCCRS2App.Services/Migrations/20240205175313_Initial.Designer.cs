@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FITCCRS2App.Services.Migrations
 {
     [DbContext(typeof(FITCCRS2v2Context))]
-    [Migration("20240204232735_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240205175313_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -352,8 +352,8 @@ namespace FITCCRS2App.Services.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("prezime");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("KomisijaId");
 
@@ -844,10 +844,10 @@ namespace FITCCRS2App.Services.Migrations
                         new
                         {
                             UserId = 1,
-                            BirthDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4540),
+                            BirthDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5530),
                             CitizenshipId = 1,
                             CityId = 1,
-                            CreateDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4500),
+                            CreateDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5490),
                             Email = "mellimostar@gmail.com",
                             FirstName = "Melissa",
                             Gender = 1,
@@ -861,10 +861,10 @@ namespace FITCCRS2App.Services.Migrations
                         new
                         {
                             UserId = 2,
-                            BirthDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4560),
+                            BirthDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5550),
                             CitizenshipId = 1,
                             CityId = 2,
-                            CreateDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4560),
+                            CreateDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5550),
                             Email = "lamija.babovic@edu.fit.ba",
                             FirstName = "lamija",
                             Gender = 1,
@@ -878,10 +878,10 @@ namespace FITCCRS2App.Services.Migrations
                         new
                         {
                             UserId = 3,
-                            BirthDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4580),
+                            BirthDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5570),
                             CitizenshipId = 1,
                             CityId = 2,
-                            CreateDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4580),
+                            CreateDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5570),
                             Email = "ziri@gmail.com",
                             FirstName = "Ziri",
                             Gender = 1,
@@ -895,10 +895,10 @@ namespace FITCCRS2App.Services.Migrations
                         new
                         {
                             UserId = 4,
-                            BirthDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4600),
+                            BirthDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5590),
                             CitizenshipId = 1,
                             CityId = 3,
-                            CreateDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4590),
+                            CreateDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5580),
                             Email = "bablamija@gmail.com",
                             FirstName = "lamija",
                             Gender = 1,
@@ -912,10 +912,10 @@ namespace FITCCRS2App.Services.Migrations
                         new
                         {
                             UserId = 5,
-                            BirthDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4610),
+                            BirthDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5600),
                             CitizenshipId = 1,
                             CityId = 1,
-                            CreateDate = new DateTime(2024, 2, 5, 0, 27, 34, 883, DateTimeKind.Local).AddTicks(4610),
+                            CreateDate = new DateTime(2024, 2, 5, 18, 53, 13, 83, DateTimeKind.Local).AddTicks(5600),
                             Email = "sponzor@gmail.com",
                             FirstName = "Sponzor",
                             Gender = 0,
@@ -936,9 +936,8 @@ namespace FITCCRS2App.Services.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRoleId"), 1L, 1);
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -953,31 +952,31 @@ namespace FITCCRS2App.Services.Migrations
                         new
                         {
                             UserRoleId = 1,
-                            Role = "Admin",
+                            Role = 0,
                             UserId = 1
                         },
                         new
                         {
                             UserRoleId = 2,
-                            Role = "Admin",
+                            Role = 0,
                             UserId = 2
                         },
                         new
                         {
                             UserRoleId = 3,
-                            Role = "Ziri",
+                            Role = 1,
                             UserId = 3
                         },
                         new
                         {
                             UserRoleId = 4,
-                            Role = "Takmicar",
+                            Role = 2,
                             UserId = 4
                         },
                         new
                         {
                             UserRoleId = 5,
-                            Role = "Sponzor",
+                            Role = 3,
                             UserId = 5
                         });
                 });

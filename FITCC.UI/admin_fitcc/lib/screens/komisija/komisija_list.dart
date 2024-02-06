@@ -1,5 +1,6 @@
 import 'package:admin_fitcc/models/kategorija.dart';
 import 'package:admin_fitcc/models/komisija.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
 import 'package:admin_fitcc/providers/kategorija_provider.dart';
 import 'package:admin_fitcc/providers/komisija_provider.dart';
 import 'package:admin_fitcc/screens/komisija/komsija_add.dart';
@@ -14,7 +15,7 @@ class _KomisijaListState extends State<KomisijaList> {
   List<Komisija> komisijaList = [];
   List<Kategorija> kategorijeOptions = [];
   String selectedKategorija = 'All';
-  Kategorija? latestKategorija;
+
   @override
   void initState() {
     super.initState();
@@ -24,30 +25,27 @@ class _KomisijaListState extends State<KomisijaList> {
 
   Future<void> _fetchKomisijaData() async {
     try {
-      List<Komisija> fetchedKomisijaList =
-          await KomisijaProvider().fetchKomisijaList();
+      PagedResult<Komisija> fetchedKomisijaList =
+          await KomisijaProvider().get();
       setState(() {
-        komisijaList = fetchedKomisijaList;
+        komisijaList = fetchedKomisijaList.result;
       });
     } catch (e) {
       print('Error fetching Komisija data: $e');
     }
   }
 
-  
-    Future<void> _fetchKategorijeOptions() async {
+  Future<void> _fetchKategorijeOptions() async {
     try {
-      List<Kategorija> fetchedKategorijeOptions =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeOptions =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeOptions.addAll(fetchedKategorijeOptions);
+        kategorijeOptions = fetchedKategorijeOptions.result;
       });
     } catch (e) {
       print('Error fetching Kategorije options: $e');
     }
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +84,7 @@ class _KomisijaListState extends State<KomisijaList> {
               ],
             ),
           ),
-         Expanded(
+          Expanded(
             child: DataTable(
               columns: [
                 DataColumn(label: Text('Projekat Naziv')),

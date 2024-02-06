@@ -3,7 +3,7 @@ import '../models/komisija.dart';
 import 'base_provider.dart';
 
 class KomisijaProvider extends BaseProvider<Komisija> {
-  KomisijaProvider() : super("api/Komisija");
+  KomisijaProvider() : super("Komisija");
 
   @override
   Komisija fromJson(data) {
