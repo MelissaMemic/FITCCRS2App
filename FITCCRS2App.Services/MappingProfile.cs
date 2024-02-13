@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FITCCRS2App.Models.Models;
 using FITCCRS2App.Models.RequestObjects;
 
 namespace FITCCRS2App.Services
@@ -28,6 +29,11 @@ namespace FITCCRS2App.Services
                 .ForMember(dest => dest.RezultatId, opt => opt.MapFrom(src => src.RezultatId))
                 .ForMember(dest => dest.Napomena, opt => opt.MapFrom(src => src.Napomena));
 
+            CreateMap<KriterijUpsertRequest, Database.Kriterij>();
+            CreateMap<KomisijaInsertRequest, Database.Komisija>();
+            CreateMap<DogadjajInsertRequest, Database.Dogadjaj>();
+            CreateMap<DogadjajUpdateRequest, Database.Dogadjaj>();
+            
             CreateMap<Database.Skategorije, Models.Models.SKategorije>();
             CreateMap<Database.Sponzor, Models.Models.Sponzor>();
             CreateMap<Database.Takmicenje, Models.Models.Takmicenje>();
@@ -49,6 +55,29 @@ namespace FITCCRS2App.Services
                 .ForMember(x => x.UserId, opt => opt.MapFrom(y => y.User.UserId))
                 .ForMember(x => x.User, opt => opt.Ignore());
 
+            CreateMap<Dogadjaj, DogadjajPerAgenda>()
+            .ForMember(dest => dest.DogadjajId, opt => opt.MapFrom(src => src.DogadjajId))
+            .ForMember(dest => dest.Kraj, opt => opt.MapFrom(src => src.Kraj))
+            .ForMember(dest => dest.Pocetak, opt => opt.MapFrom(src => src.Pocetak))
+            .ForMember(dest => dest.Lokacija, opt => opt.MapFrom(src => src.Lokacija))
+            .ForMember(dest => dest.Trajanje, opt => opt.MapFrom(src => src.Trajanje))
+            .ForMember(dest => dest.Napomena, opt => opt.MapFrom(src => src.Napomena))
+            .ForMember(dest => dest.Naziv, opt => opt.MapFrom(src => src.Napomena))
+            .ForMember(dest => dest.AgendaId, opt => opt.Ignore())
+            .ForMember(dest => dest.TakmicenjeId, opt => opt.Ignore())
+            .ForMember(dest => dest.Dan, opt => opt.Ignore());
+
+            CreateMap<Agenda, DogadjajPerAgenda>()
+                .ForMember(dest => dest.DogadjajId, opt => opt.Ignore())
+                .ForMember(dest => dest.Kraj, opt => opt.Ignore())
+                .ForMember(dest => dest.Pocetak, opt => opt.Ignore())
+                .ForMember(dest => dest.Lokacija, opt => opt.Ignore())
+                .ForMember(dest => dest.Trajanje, opt => opt.Ignore())
+                .ForMember(dest => dest.Napomena, opt => opt.Ignore())
+                .ForMember(dest => dest.Naziv, opt => opt.Ignore())
+                .ForMember(dest => dest.AgendaId, opt => opt.MapFrom(src => src.AgendaId))
+                .ForMember(dest => dest.Dan, opt => opt.MapFrom(src => src.Dan))
+                .ForMember(dest => dest.TakmicenjeId, opt => opt.MapFrom(src => src.TakmicenjeId));
         }
     }
 

@@ -90,16 +90,22 @@ class _KomisijaListState extends State<KomisijaList> {
                 DataColumn(label: Text('Projekat Naziv')),
                 DataColumn(label: Text('Napomena')),
                 DataColumn(label: Text('Bod')),
-                // DataColumn(label: Text('Projekat Opis')),
-                // DataColumn(label: Text('Kategorija ID')),
+                DataColumn(label: Text(' ')),
               ],
               rows: filteredKomisijaList.map((rezultat) {
                 return DataRow(cells: [
                   DataCell(Text(rezultat.ime)),
                   DataCell(Text(rezultat.prezime)),
                   DataCell(Text(rezultat.email.toString())),
-                  // DataCell(Text(rezultat.ulogaKomisijeID'')),
-                  // DataCell(Text(rezultat.projekat?.kategorijaId.toString() ?? '')),
+                  DataCell(
+                    ElevatedButton(
+                      onPressed: () {
+                        _deleteKomisija(rezultat.komisijaId);
+                      },
+                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      child: Text('Izbrisi'),
+                    ),
+                  ),
                 ]);
               }).toList(),
             ),
@@ -122,7 +128,7 @@ class _KomisijaListState extends State<KomisijaList> {
   void _deleteKomisija(int komisijaID) async {
     try {
       await KomisijaProvider().delete(komisijaID);
-      _fetchKomisijaData(); // Refresh the list after deletion
+      _fetchKomisijaData();
     } catch (e) {
       print('Error deleting komisija: $e');
     }

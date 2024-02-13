@@ -7,7 +7,7 @@ using FITCCRS2App.Services.Services.KriterijService;
 
 namespace FITCCApp.Controllers
 {
-    public class KriterijiController : BaseCRUDController<Kriterij, BaseSearchObject, KriterijInsertRequest, KriterijUpdateRequest>
+    public class KriterijiController : BaseCRUDController<Kriterij, BaseSearchObject, KriterijUpsertRequest, KriterijUpsertRequest>
     {
         public KriterijiController(ILogger<BaseController<Kriterij, BaseSearchObject>> logger, IKriterijService service) : base(logger, service)
         {

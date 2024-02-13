@@ -8,5 +8,6 @@ namespace FITCCRS2App.Services.Services.AgendaService
     public interface IAgendaService :ICRUDService<Agenda, BaseSearchObject, AgendaUpsertRequest, AgendaUpsertRequest>
     {
         List<Agenda> getLastTakmicenjeAgenda();
+        List<Models.Models.DogadjajPerAgenda> getLastAgendasDogadjaj();
     }
 }

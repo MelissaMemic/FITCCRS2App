@@ -1,6 +1,4 @@
 
-import 'package:admin_fitcc/models/kategorija.dart';
-import 'package:admin_fitcc/models/tim.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'projekat.g.dart';

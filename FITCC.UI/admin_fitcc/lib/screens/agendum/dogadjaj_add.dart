@@ -1,9 +1,11 @@
 import 'package:admin_fitcc/models/agenda.dart';
-import 'package:admin_fitcc/models/dogadjaj.dart';
 import 'package:admin_fitcc/models/dogadjajagenda.dart';
-import 'package:admin_fitcc/models/requests/upsert_dogadjaj.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
+import 'package:admin_fitcc/models/requests/insert_dogadjaj.dart';
+import 'package:admin_fitcc/models/requests/update_dogadjaj.dart';
 import 'package:admin_fitcc/providers/agenda_provider.dart';
 import 'package:admin_fitcc/providers/dogadjaj_provider.dart';
+import 'package:admin_fitcc/screens/agendum/agendum.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,7 +19,7 @@ class DogadjajAdd extends StatefulWidget {
 
 class _DogadjajAddState extends State<DogadjajAdd> {
   List<Agenda> agendaList = [];
-  Agenda? selectedAgenda;
+  int? selectedAgendaId;
   Agenda? preselectedAgenda;
 
   TextEditingController nazivController = TextEditingController();
@@ -26,18 +28,22 @@ class _DogadjajAddState extends State<DogadjajAdd> {
   TextEditingController trajanjeController = TextEditingController();
   TextEditingController napomenaController = TextEditingController();
   TextEditingController krajController = TextEditingController();
+  TextEditingController dateTimeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _fetchAgendaList();
-    if (widget.dogadjaj != null) {
-      _getpreselectedAgenda(widget.dogadjaj!.agendaId);
+    _initializeFormData();
+  }
 
-      selectedAgenda = preselectedAgenda;
+  void _initializeFormData() {
+    if (widget.dogadjaj != null) {
+      selectedAgendaId = widget.dogadjaj!.agendaId;
       nazivController.text = widget.dogadjaj!.naziv;
       lokacijaController.text = widget.dogadjaj!.lokacija;
-      //napomenaController.text = widget.dogadjaj!.napomena;
+      napomenaController.text =
+          widget.dogadjaj!.napomena == null ? '' : widget.dogadjaj!.napomena!;
       krajController.text = widget.dogadjaj!.pocetak != null
           ? _formatDate(widget.dogadjaj!.kraj!)
           : '';
@@ -48,22 +54,11 @@ class _DogadjajAddState extends State<DogadjajAdd> {
     }
   }
 
-  Future<void> _getpreselectedAgenda(int id) async {
-    try {
-      Agenda fetchedAgenda = await AgendaProvider().getById(id);
-      setState(() {
-        preselectedAgenda = fetchedAgenda;
-      });
-    } catch (e) {
-      print('Error fetching Agenda preselect: $e');
-    }
-  }
-
   Future<void> _fetchAgendaList() async {
     try {
-      List<Agenda> fetchedAgendaList = await AgendaProvider().fetchAgendaList();
+      PagedResult<Agenda> fetchedAgendaList = await AgendaProvider().get();
       setState(() {
-        agendaList = fetchedAgendaList;
+        agendaList = fetchedAgendaList.result;
       });
     } catch (e) {
       print('Error fetching Agenda list: $e');
@@ -73,35 +68,83 @@ class _DogadjajAddState extends State<DogadjajAdd> {
   Future<void> _insertDogadjaj() async {
     try {
       if (widget.dogadjaj != null) {
-        await DogadjajProvider().update(widget.dogadjaj!.dogadjajId, {
-          widget.dogadjaj!.dogadjajId,
+        DogadjajUpdateRequest updateObject = DogadjajUpdateRequest(
           nazivController.text,
           int.parse(trajanjeController.text),
           _parseDate(pocetakController.text),
           _parseDate(krajController.text),
-          ' ',
-          1,
-          'Tribina'
-        });
-      } else {
-//         UpsertDogadjaj insertObject = UpsertDogadjaj(
-//   naziv: nazivController.text,
-//   trajanje: int.parse(trajanjeController.text),
-//   pocetak: _parseDate(pocetakController.text),
-//   napomena: ' ',
-//   agendaId: 1,
-//   lokacija: lokacijaController.text,
-// );
+          napomenaController.text,
+          selectedAgendaId!,
+          lokacijaController.text,
+        );
 
-//         await DogadjajProvider().insert(insertObject);
+        await DogadjajProvider()
+            .update(widget.dogadjaj!.dogadjajId, updateObject);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DogadjajList()),
+        );
+      } else {
+        DogadjajInsertRequest insertObject = DogadjajInsertRequest(
+          nazivController.text,
+          int.parse(trajanjeController.text),
+          DateTime.now(),
+          DateTime.now(),
+          'napomena',
+          1,
+          lokacijaController.text,
+        );
+
+        await DogadjajProvider().insert(insertObject);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DogadjajList()),
+        );
       }
     } catch (e) {
       print('Error inserting/updating Dogadjaj data: $e');
     }
   }
 
+  Future<void> _selectDateTime(
+      BuildContext context, TextEditingController control) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      if (pickedTime != null) {
+        final DateTime finalDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+        setState(() {
+          control.text =
+              DateFormat('yyyy-MM-dd HH:mm:ss').format(finalDateTime);
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem<int>> agende = agendaList.map((agenda) {
+      return DropdownMenuItem<int>(
+        value: agenda.agendaId,
+        child: Text(agenda.dan.toString()),
+      );
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.dogadjaj != null ? 'Edit Dogadjaj' : 'Add Dogadjaj'),
@@ -121,27 +164,59 @@ class _DogadjajAddState extends State<DogadjajAdd> {
               decoration: InputDecoration(labelText: 'Naziv'),
             ),
             TextField(
+              controller: napomenaController,
+              decoration: InputDecoration(labelText: 'Napomena'),
+            ),
+            TextField(
               controller: lokacijaController,
               decoration: InputDecoration(labelText: 'Lokacija'),
             ),
             TextField(
               controller: trajanjeController,
-              decoration: InputDecoration(labelText: 'Trajanje'),
+              decoration: InputDecoration(labelText: 'Trajanje u minutama'),
             ),
-            TextField(
+            DropdownButtonFormField<int>(
+              value: selectedAgendaId,
+              onChanged: (int? newValue) {
+                setState(() {
+                  selectedAgendaId = newValue;
+                });
+              },
+              items: agende,
+              decoration: InputDecoration(labelText: 'Dan'),
+            ),
+            SizedBox(height: 16),
+            TextFormField(
               controller: pocetakController,
-              decoration: InputDecoration(labelText: 'Pocetak'),
+              decoration: InputDecoration(
+                labelText: 'Pocetak',
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.calendar_today),
+                  onPressed: () => _selectDateTime(context, pocetakController),
+                ),
+              ),
+              readOnly: true, // To prevent manual editing
             ),
-            TextField(
+            SizedBox(height: 16),
+            TextFormField(
               controller: krajController,
-              decoration: InputDecoration(labelText: 'Kraj'),
+              decoration: InputDecoration(
+                labelText: 'Kraj',
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.calendar_today),
+                  onPressed: () => _selectDateTime(context, krajController),
+                ),
+              ),
+              readOnly: true, // To prevent manual editing
             ),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 _insertDogadjaj();
               },
-              child: Text('Dodaj Dogadjaj'),
+              child: Text(widget.dogadjaj == null
+                  ? 'Dodaj Dogadjaj'
+                  : 'Spasi promjene'),
             ),
           ],
         ),
@@ -151,7 +226,7 @@ class _DogadjajAddState extends State<DogadjajAdd> {
 
   DateTime _parseDate(String dateString) {
     try {
-      return DateFormat('dd-MM-yyyy').parse(dateString);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').parse(dateString);
     } catch (e) {
       print('Error parsing date: $e');
       throw Exception('Invalid date format');
@@ -159,6 +234,6 @@ class _DogadjajAddState extends State<DogadjajAdd> {
   }
 
   String _formatDate(DateTime date) {
-    return DateFormat('dd-MM-yyyy').format(date);
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
   }
 }

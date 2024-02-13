@@ -134,6 +134,7 @@ class _KriterijiListState extends State<KriterijiList> {
  Future<void> _deleteKriterij(int kriterijId) async {
     try {
           await KriterijProvider().delete(kriterijId);
+          _fetchKriterijData();
     } catch (e) {
       print('Error deleting kriterij: $e');
     }

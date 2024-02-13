@@ -5,5 +5,6 @@ namespace FITCCRS2App.Services.Services.BaseServices
     {
         Task<T> Insert(TInsert insert);
         Task<T> Update(int id, TUpdate update);
+        Task<bool> DeleteAsync(int id);
     }
 }

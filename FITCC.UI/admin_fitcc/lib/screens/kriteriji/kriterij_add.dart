@@ -1,11 +1,13 @@
 import 'package:admin_fitcc/models/kriterij.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
+import 'package:admin_fitcc/models/requests/upsert_kriterij.dart';
 import 'package:admin_fitcc/providers/kriterij_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_fitcc/models/kategorija.dart';
 import 'package:admin_fitcc/providers/kategorija_provider.dart';
 
 class KriterijAdd extends StatefulWidget {
-    final Kriterij? kriterij;
+  final Kriterij? kriterij;
   KriterijAdd({this.kriterij});
 
   @override
@@ -15,16 +17,19 @@ class KriterijAdd extends StatefulWidget {
 class _KriterijAddState extends State<KriterijAdd> {
   TextEditingController nazivController = TextEditingController();
   TextEditingController vrijednostController = TextEditingController();
-  String selectedKategorija = '1';
-
+  int? selectedKategorijaId;
   List<Kategorija> kategorijeList = [];
 
   @override
   void initState() {
     super.initState();
     _fetchKategorijeList();
-     if (widget.kriterij != null) {
-      selectedKategorija = widget.kriterij!.kategorijaId.toString();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    if (widget.kriterij != null) {
+      selectedKategorijaId = widget.kriterij!.kategorijaId;
       nazivController.text = widget.kriterij!.naziv;
       vrijednostController.text = widget.kriterij!.vrijednost;
     }
@@ -32,10 +37,10 @@ class _KriterijAddState extends State<KriterijAdd> {
 
   Future<void> _fetchKategorijeList() async {
     try {
-      List<Kategorija> fetchedKategorijeList =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeList =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeList = fetchedKategorijeList;
+        kategorijeList = fetchedKategorijeList.result;
       });
     } catch (e) {
       print('Error fetching Kategorije data: $e');
@@ -44,21 +49,20 @@ class _KriterijAddState extends State<KriterijAdd> {
 
   Future<void> _insertKriterij() async {
     try {
-            if (widget.kriterij != null) {
+      KriterijUpsertRequest kriterij = KriterijUpsertRequest(
+            nazivController.text,
+            vrijednostController.text,
+            selectedKategorijaId!);
+      if (widget.kriterij != null) {
+        
+        await KriterijProvider().update(widget.kriterij!.kriterijId,kriterij );
+                Navigator.pop(context);
 
-       await KriterijProvider().update(widget.kriterij!.kriterijId, {
-          widget.kriterij!.kriterijId,
-          nazivController.text,
-          vrijednostController.text,
-          int.parse(selectedKategorija)
-        });
-            }else{
-// Kriterij insertObject=Kriterij();
-//         insertObject.naziv = nazivController.text;
-//       insertObject.vrijednost = vrijednostController.text;
-//       insertObject.kategorijaId = int.parse(selectedKategorija);
-//         await KriterijProvider().insert(insertObject);
-            }
+      } else {
+        await KriterijProvider().insert(kriterij );
+                Navigator.pop(context);
+
+      }
     } catch (e) {
       print('Error inserting Kriterij data: $e');
     }
@@ -66,6 +70,14 @@ class _KriterijAddState extends State<KriterijAdd> {
 
   @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem<int>> kategorijaDropdownItems =
+        kategorijeList.map((kategorija) {
+      return DropdownMenuItem<int>(
+        value: kategorija.kategorijaId,
+        child: Text(kategorija.naziv),
+      );
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Kriterij'),
@@ -83,19 +95,14 @@ class _KriterijAddState extends State<KriterijAdd> {
               controller: vrijednostController,
               decoration: InputDecoration(labelText: 'Vrijednost'),
             ),
-            DropdownButtonFormField<String>(
-              value: selectedKategorija,
-              onChanged: (value) {
+            DropdownButtonFormField<int>(
+              value: selectedKategorijaId,
+              onChanged: (int? newValue) {
                 setState(() {
-                  selectedKategorija = value!;
+                  selectedKategorijaId = newValue;
                 });
               },
-              items: kategorijeList.map((kategorija) {
-                return DropdownMenuItem<String>(
-                  value: kategorija.kategorijaId.toString(),
-                  child: Text(kategorija.naziv.toString()),
-                );
-              }).toList(),
+              items: kategorijaDropdownItems,
               decoration: InputDecoration(labelText: 'Kategorija'),
             ),
             SizedBox(height: 16),
@@ -103,7 +110,8 @@ class _KriterijAddState extends State<KriterijAdd> {
               onPressed: () {
                 _insertKriterij();
               },
-              child: Text('Dodaj Kriterij'),
+              child: Text(
+                  widget.kriterij == null ? 'Dodaj Kriterij' : 'Spasi izmjene'),
             ),
           ],
         ),

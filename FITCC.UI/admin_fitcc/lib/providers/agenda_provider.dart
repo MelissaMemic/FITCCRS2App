@@ -11,7 +11,7 @@ class AgendaProvider extends BaseProvider<Agenda> {
   }
 
   Future<List<Agenda>> fetchAgendaList() async {
-    var url = Uri.parse("https://localhost:7038/api/Agenda/getLast");
+    var url = Uri.parse("https://localhost:7038/Agenda/getLast");
 
     Map<String, String> headers = createHeaders();
 

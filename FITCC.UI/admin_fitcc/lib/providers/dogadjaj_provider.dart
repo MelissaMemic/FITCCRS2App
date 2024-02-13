@@ -3,7 +3,7 @@ import 'package:admin_fitcc/models/dogadjaj.dart';
 import 'base_provider.dart';
 
 class DogadjajProvider extends BaseProvider<Dogadjaj> {
-  DogadjajProvider() : super("api/Dogadjaj");
+  DogadjajProvider() : super("Dogadjaj");
 
   @override
   Dogadjaj fromJson(data) {

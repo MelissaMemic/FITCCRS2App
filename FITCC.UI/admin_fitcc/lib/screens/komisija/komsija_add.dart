@@ -1,14 +1,16 @@
-import 'package:admin_fitcc/models/komisija.dart';
-import 'package:admin_fitcc/providers/komisija_provider.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
+import 'package:admin_fitcc/models/requests/insert_komisija.dart';
 import 'package:flutter/material.dart';
+import 'package:admin_fitcc/models/komisija.dart';
 import 'package:admin_fitcc/models/enums/ulogeKomisije.dart';
 import 'package:admin_fitcc/models/kategorija.dart';
-import 'package:admin_fitcc/providers/uloge_komisije_provider.dart';
+import 'package:admin_fitcc/providers/komisija_provider.dart';
 import 'package:admin_fitcc/providers/kategorija_provider.dart';
 
 class KomisijaAdd extends StatefulWidget {
   final Komisija? komisija;
   KomisijaAdd({this.komisija});
+
   @override
   _KomisijaAddState createState() => _KomisijaAddState();
 }
@@ -17,8 +19,8 @@ class _KomisijaAddState extends State<KomisijaAdd> {
   TextEditingController imeController = TextEditingController();
   TextEditingController prezimeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  String selectedUlogeKomisije = '';
-  String selectedKategorija = '';
+  UlogeKomisije? selectedUlogeKomisije;
+  int? selectedKategorijaId;
 
   List<UlogeKomisije> ulogeKomisijeList = [];
   List<Kategorija> kategorijeList = [];
@@ -26,52 +28,83 @@ class _KomisijaAddState extends State<KomisijaAdd> {
   @override
   void initState() {
     super.initState();
-    _fetchUlogeKomisijeList();
     _fetchKategorijeList();
+    _initializeFormData();
   }
 
-  Future<void> _fetchUlogeKomisijeList() async {
-    try {
-      // List<UlogeKomisije> fetchedUlogeKomisijeList =
-      //     await UlogeKomisijeProvider().fetchUlogeKomisijeList();
-      // setState(() {
-      //   ulogeKomisijeList = fetchedUlogeKomisijeList;
-      // });
-    } catch (e) {
-      print('Error fetching UlogeKomisije data: $e');
+  void _initializeFormData() {
+    if (widget.komisija != null) {
+      imeController.text = widget.komisija!.ime ?? '';
+      prezimeController.text = widget.komisija!.prezime ?? '';
+      emailController.text = widget.komisija!.email ?? '';
+      selectedUlogeKomisije = widget.komisija!.role;
+      selectedKategorijaId = widget.komisija!.kategorijaId;
     }
   }
 
   Future<void> _fetchKategorijeList() async {
     try {
-      List<Kategorija> fetchedKategorijeList =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeList =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeList = fetchedKategorijeList;
+        kategorijeList = fetchedKategorijeList.result;
       });
     } catch (e) {
       print('Error fetching Kategorije data: $e');
     }
   }
 
-  Future<void> _insertKomisija() async {
+  Future<void> _saveKomisija() async {
     try {
-      //         Komisija insertObject=Komisija();
-      //   insertObject.ime = imeController.text;
-      // insertObject.prezime = prezimeController.text;
-      // insertObject.email = emailController.text;
-      // insertObject.kategorijaId = int.parse(selectedKategorija);
-      // insertObject.role = 
+      if (widget.komisija == null) {
+        KomisijaInsertRequest komisija = KomisijaInsertRequest(
+          imeController.text,
+          prezimeController.text,
+          emailController.text,
+          UlogeKomisije.values.firstWhere(
+              (e) => e.toString() == selectedUlogeKomisije.toString()),
+          selectedKategorijaId!,
+        );
 
-      //   await KomisijaProvider().insert(insertObject);
-
-      } catch (e) {
-      print('Error inserting Komisija data: $e');
+        await KomisijaProvider().insert(komisija);
+        Navigator.pop(context);
+      } else {
+        Komisija komisija = Komisija(
+          widget.komisija!.komisijaId,
+          imeController.text,
+          prezimeController.text,
+          emailController.text,
+          UlogeKomisije.values.firstWhere(
+              (e) => e.toString() == selectedUlogeKomisije.toString()),
+          selectedKategorijaId!,
+        );
+        komisija.komisijaId = widget.komisija!.komisijaId;
+        await KomisijaProvider().update(komisija.komisijaId, komisija);
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      print('Error saving Komisija data: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem<UlogeKomisije>> ulogeKomisijeDropdownItems =
+        UlogeKomisije.values.map((role) {
+      return DropdownMenuItem<UlogeKomisije>(
+        value: role,
+        child: Text(role.toString().split('.').last),
+      );
+    }).toList();
+
+    List<DropdownMenuItem<int>> kategorijaDropdownItems =
+        kategorijeList.map((kategorija) {
+      return DropdownMenuItem<int>(
+        value: kategorija.kategorijaId,
+        child: Text(kategorija.naziv),
+      );
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Komisija'),
@@ -93,41 +126,29 @@ class _KomisijaAddState extends State<KomisijaAdd> {
               controller: emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
-            // DropdownButtonFormField<String>(
-            //   value: selectedUlogeKomisije,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       selectedUlogeKomisije = value!;
-            //     });
-            //   },
-            //   items: ulogeKomisijeList.map((uloga) {
-            //     return DropdownMenuItem<String>(
-            //       value: uloga.naziv,
-            //       child: Text(uloga.naziv),
-            //     );
-            //   }).toList(),
-            //   decoration: InputDecoration(labelText: 'Uloge Komisije'),
-            // ),
-            DropdownButtonFormField<String>(
-              value: selectedKategorija,
-              onChanged: (value) {
+            DropdownButtonFormField<UlogeKomisije>(
+              value: selectedUlogeKomisije,
+              onChanged: (UlogeKomisije? newValue) {
                 setState(() {
-                  selectedKategorija = value!;
+                  selectedUlogeKomisije = newValue;
                 });
               },
-              items: kategorijeList.map((kategorija) {
-                return DropdownMenuItem<String>(
-                  value: kategorija.naziv,
-                  child: Text(kategorija.naziv.toString()),
-                );
-              }).toList(),
+              items: ulogeKomisijeDropdownItems,
+              decoration: InputDecoration(labelText: 'Uloga Komisije'),
+            ),
+            DropdownButtonFormField<int>(
+              value: selectedKategorijaId,
+              onChanged: (int? newValue) {
+                setState(() {
+                  selectedKategorijaId = newValue;
+                });
+              },
+              items: kategorijaDropdownItems,
               decoration: InputDecoration(labelText: 'Kategorija'),
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                _insertKomisija();
-              },
+              onPressed: _saveKomisija,
               child: Text('Dodaj Komisiju'),
             ),
           ],

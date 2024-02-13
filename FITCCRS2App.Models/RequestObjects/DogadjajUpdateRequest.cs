@@ -1,8 +1,7 @@
-﻿namespace FITCCRS2App.Models.Models
+﻿namespace FITCCRS2App.Models.RequestObjects
 {
-    public class Dogadjaj
+    public class DogadjajUpdateRequest
 	{
-        public int DogadjajId { get; set; }
         public string? Naziv { get; set; }
         public int? Trajanje { get; set; }
         public DateTime? Pocetak { get; set; }
@@ -11,6 +10,6 @@
         public string? Lokacija { get; set; }
 
         public int? AgendaId { get; set; }
-        public virtual Agenda? Agenda { get; set; }
     }
 }
+

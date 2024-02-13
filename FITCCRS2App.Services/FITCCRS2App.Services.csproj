@@ -28,6 +28,7 @@
     <None Remove="Services\KategorijaService\" />
     <None Remove="Services\ProjekatService\" />
     <None Remove="Services\RezultatService\" />
+    <None Remove="Services\DogadjajService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -40,6 +41,7 @@
     <Folder Include="Services\KategorijaService\" />
     <Folder Include="Services\ProjekatService\" />
     <Folder Include="Services\RezultatService\" />
+    <Folder Include="Services\DogadjajService\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FITCCRS2App.Models\FITCCRS2App.Models.csproj" />

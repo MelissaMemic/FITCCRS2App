@@ -69,25 +69,36 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-Future<void> delete(int id) async {
-    try {
-      _loginService.verifySession();
+// Future<void> delete(int id) async {
+//     try {
+//       var url = "$_baseUrl$_endpoint/$id";
+//       var uri = Uri.parse(url);
+
+//       Map<String, String> headers = createHeaders();
+//       var response = await http!.delete(uri, headers: headers);
+
+//       if (!isValidResponseCode(response)) {
+//         throw Exception("Failed to delete item");
+//       }
+//     } catch (e) {
+//       print("Error deleting item: $e");
+//       throw Exception("Failed to delete item");
+//     }
+//   }
+    Future<bool> delete(int id) async {
       var url = "$_baseUrl$_endpoint/$id";
       var uri = Uri.parse(url);
 
-      Map<String, String> headers = createHeaders();
-      var response = await http!.delete(uri, headers: headers);
+    var response = await http!.delete(uri, headers: getHeaders());
 
-      if (!isValidResponseCode(response)) {
-        throw Exception("Failed to delete item");
-      }
-    } catch (e) {
-      print("Error deleting item: $e");
-      throw Exception("Failed to delete item");
+    if (isValidResponseCode(response)) {
+      return true;
+    } else {
+      throw Exception("Response is not valid");
     }
   }
+
 Future<T> getById(int id, [dynamic additionalData]) async {
- _loginService.verifySession();
   var url = Uri.parse("$_baseUrl$_endpoint/$id");
 
   Map<String, String> headers = createHeaders();
@@ -134,39 +145,85 @@ Future<T> getById(int id, [dynamic additionalData]) async {
     }
   }
 
-Future<T?> insert(dynamic request) async {
-   _loginService.verifySession();
+// Future<T?> insert(dynamic request) async {
+//    _loginService.verifySession();
+//     var url = "$_baseUrl$_endpoint";
+//     var uri = Uri.parse(url);
+
+//     Map<String, String> headers = createHeaders();
+//     var jsonRequest = jsonEncode(request);
+//     var response = await http!.post(uri, headers: headers, body: jsonRequest);
+
+//     if (isValidResponseCode(response)) {
+//       var data = jsonDecode(response.body);
+//       return fromJson(data) as T;
+//     } else {
+//       return null;
+//     }
+//   }
+
+  Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
 
-    Map<String, String> headers = createHeaders();
     var jsonRequest = jsonEncode(request);
-    var response = await http!.post(uri, headers: headers, body: jsonRequest);
+
+    var response =
+        await http!.post(uri, headers: getHeaders(), body: jsonRequest);
 
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
-      return fromJson(data) as T;
-    } else {
-      return null;
-    }
+      return fromJson(data);
+    } else if (response.statusCode == 400){
+    var data = jsonDecode(response.body);
+    throw Exception(data['message']);
+    }else {
+    throw Exception('Failed to create object');
   }
+
+  }
+  
+  dynamic myDateSerializer(dynamic object) {
+    if (object is DateTime) {
+      return object.toIso8601String();
+    }
+    return object;
+  }
+
   Future<T?> update(int id, [dynamic request]) async {
-    _loginService.verifySession();
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
+    var jsonRequest = jsonEncode(request);
 
     Map<String, String> headers = createHeaders();
 
     var response =
-        await http!.put(uri, headers: headers, body: jsonEncode(request));
+        await http!.put(uri, headers: getHeaders(), body: jsonRequest);
+
 
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
-      return fromJson(data) as T;
+      return fromJson(data);
     } else {
-      return null;
+      throw Exception("Response is not valid");
     }
   }
+  // Future<T> update(int id, dynamic request) async {
+  //   var uri = Uri.https(baseUrl, '$endpoint/$id');
+
+  //   var jsonRequest = jsonEncode(request, toEncodable: myDateSerializer);
+
+  //   var response =
+  //       await http.put(uri, headers: getHeaders(), body: jsonRequest);
+
+  //   if (isValidResponse(response)) {
+  //     var data = jsonDecode(response.body);
+  //     return fromJson(data);
+  //   } else {
+  //     throw Exception("Response is not valid");
+  //   }
+  // }
+
 
   T fromJson(data) {
     throw Exception("Override method");

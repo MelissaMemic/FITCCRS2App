@@ -1,21 +1,17 @@
 import 'dart:convert';
-
 import 'package:admin_fitcc/models/kategorija_test.dart';
-import 'package:admin_fitcc/providers/login_provider.dart';
 import 'package:http/http.dart' as http;
 import '../models/kategorija.dart';
 import 'base_provider.dart';
 
 class KategorijaProvider extends BaseProvider<Kategorija> {
   KategorijaProvider() : super("Kategorija");
-  LoginService _loginService = LoginService();
 
   @override
   Kategorija fromJson(data) {
     return Kategorija.fromJson(data);
   }
 Future<KategorijaTest?> getLatestKategorija() async {
-      // _loginService.verifySession();
 
   var url = Uri.parse("https://localhost:7038/api/Kategorija/getLast");
 
@@ -37,7 +33,6 @@ Future<KategorijaTest?> getLatestKategorija() async {
 }
 
   Future<List<Kategorija>> getKategorije() async {
-          // _loginService.verifySession();
 
     var url = Uri.parse("https://localhost:7038/api/Kategorija/getLast");
 

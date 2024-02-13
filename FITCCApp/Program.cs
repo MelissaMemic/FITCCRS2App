@@ -15,6 +15,7 @@ using FITCCRS2App.Services.Services.KomisijaService;
 using FITCCRS2App.Services.Services.KategorijaService;
 using FITCCRS2App.Services.Services.ProjekatService;
 using FITCCRS2App.Services.Services.RezultatService;
+using FITCCRS2App.Services.Services.DogadjajService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,7 @@ builder.Services.AddTransient<IKomisijaService, KomisijaService>();
 builder.Services.AddTransient<IKategorijaService, KategorijaService>();
 builder.Services.AddTransient<IProjekatService, ProjekatService>();
 builder.Services.AddTransient<IRezultatService, RezultatService>();
+builder.Services.AddTransient<IDogadjajService, DogadjajService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 //builder.Services.AddScopedServices();
