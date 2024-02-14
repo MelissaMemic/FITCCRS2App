@@ -1,8 +1,8 @@
 import 'package:admin_fitcc/models/auth_user.dart';
-import 'package:admin_fitcc/models/enums/role.dart';
 import 'package:admin_fitcc/screens/agendum/agendum.dart';
 import 'package:admin_fitcc/screens/komisija/komisija_list.dart';
 import 'package:admin_fitcc/screens/kriteriji/kriteriji_list.dart';
+import 'package:admin_fitcc/screens/login_page.dart';
 import 'package:admin_fitcc/screens/projekti/projekat_list.dart';
 import 'package:admin_fitcc/screens/rezultati/rezultati_list.dart';
 import 'package:admin_fitcc/screens/timovi/timovi_list.dart';
@@ -63,64 +63,71 @@ class MyHomePage extends StatelessWidget {
                 );
               },
             ),
-           if (AuthUser.roles.contains("Admin"))
-            ListTile(
-              title: Text('Komisija'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => KomisijaList()),
-                );
-              },
-            ),
-           if (AuthUser.roles.contains("Admin"))
-            ListTile(
-              title: Text('Projekti'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProjekatList()),
-                );
-              },
-            ),
-           if (AuthUser.roles.contains("Admin"))
-            ListTile(
-              title: Text('Agendum'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DogadjajList()),
-                );
-              },
-            ),
             if (AuthUser.roles.contains("Admin"))
-            ListTile(
-              title: Text('Timovi'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TimList()),
-                );
-              },
-            ),
+              ListTile(
+                title: Text('Komisija'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => KomisijaList()),
+                  );
+                },
+              ),
             if (AuthUser.roles.contains("Admin"))
-            ListTile(
-              title: Text('Kriteriji'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => KriterijiList()),
-                );
-              },
-            ),
+              ListTile(
+                title: Text('Projekti'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProjekatList()),
+                  );
+                },
+              ),
             if (AuthUser.roles.contains("Admin"))
+              ListTile(
+                title: Text('Agendum'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DogadjajList()),
+                  );
+                },
+              ),
+            if (AuthUser.roles.contains("Admin"))
+              ListTile(
+                title: Text('Timovi'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TimList()),
+                  );
+                },
+              ),
+            if (AuthUser.roles.contains("Admin"))
+              ListTile(
+                title: Text('Kriteriji'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => KriterijiList()),
+                  );
+                },
+              ),
+            if (AuthUser.roles.contains("Admin"))
+              ListTile(
+                title: Text('Rezultati'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RezultatiList()),
+                  );
+                },
+              ),
             ListTile(
-              title: Text('Rezultati'),
+              title: Text('Odjavi se'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RezultatiList()),
-                );
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const LoginScreen()));
               },
             ),
           ],

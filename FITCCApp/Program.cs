@@ -16,6 +16,8 @@ using FITCCRS2App.Services.Services.KategorijaService;
 using FITCCRS2App.Services.Services.ProjekatService;
 using FITCCRS2App.Services.Services.RezultatService;
 using FITCCRS2App.Services.Services.DogadjajService;
+using FITCCRS2App.Services.Services.SponzorService;
+using FITCCRS2App.Services.Services.RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,9 +48,12 @@ builder.Services.AddTransient<IKategorijaService, KategorijaService>();
 builder.Services.AddTransient<IProjekatService, ProjekatService>();
 builder.Services.AddTransient<IRezultatService, RezultatService>();
 builder.Services.AddTransient<IDogadjajService, DogadjajService>();
+builder.Services.AddTransient<ISponzorService, SponzorService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 
-//builder.Services.AddScopedServices();
+//builder.Services.AddScopedNotificationServices();
+
 builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.AddControllers(x =>
@@ -62,7 +67,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseSwaggerUI();
 
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

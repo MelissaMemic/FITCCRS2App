@@ -47,8 +47,8 @@ class _PregledTakmicaraScreenState extends State<PregledTakmicaraScreen> {
               ],
               rows: korisnici.map((korisnik) {
                 return DataRow(cells: [
-                  DataCell(Text('${korisnik.name} - ${korisnik.lastname}')),
-                  DataCell(Text(korisnik.website)),
+                  DataCell(Text('${korisnik.firstName} - ${korisnik.lastName}')),
+                  DataCell(Text(korisnik.webSite)),
                   DataCell(
                     ElevatedButton(
                       onPressed: () {

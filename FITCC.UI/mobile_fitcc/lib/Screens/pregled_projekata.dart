@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_fitcc/Models/paged_result.dart';
 import 'package:mobile_fitcc/Models/projekat.dart';
 import 'package:mobile_fitcc/Models/projekt_tim.dart';
 import 'package:mobile_fitcc/Models/tim.dart';
@@ -24,21 +25,21 @@ class _PregledProjekataScreenState extends State<PregledProjekataScreen> {
 
   Future<void> _fetchProjekatData() async {
     try {
-      List<Projekat> fetchedprojektiList = await ProjekatProvider().get();
-      List<Tim> fetchedtimoviList = await TimProvider().get();
+      PagedResult<Projekat> fetchedprojektiList = await ProjekatProvider().get();
+      PagedResult<Tim> fetchedtimoviList = await TimProvider().get();
 
       List<ProjekatTimInfo> newCombinedList = [];
-    var timMap = {for (var tim in fetchedtimoviList) tim.timId: tim};
+    var timMap = {for (var tim in fetchedtimoviList.result) tim.timId: tim};
 
 
-    for (var projekat in fetchedprojektiList) {
-      Tim correspondingTim = timMap[projekat.timId] ?? Tim(timId:1,naziv: 'test',brojClanova:1,userId:1,username: 'name',takmicenjeId: 1); // Provide a default Tim object if not found
+    for (var projekat in fetchedprojektiList.result) {
+      // Tim correspondingTim = timMap[projekat.timId] ?? Tim(timId:1,naziv: 'test',brojClanova:1,userId:1,username: 'name',takmicenjeId: 1); // Provide a default Tim object if not found
 
-        newCombinedList.add(ProjekatTimInfo(projekat: projekat, tim: correspondingTim)); 
+      //   newCombinedList.add(ProjekatTimInfo(projekat: projekat, tim: correspondingTim)); 
     }
       setState(() {
-        projekti = fetchedprojektiList;
-        timovi = fetchedtimoviList;
+        projekti = fetchedprojektiList.result;
+        timovi = fetchedtimoviList.result;
         combinedLista = newCombinedList;
       });
     } catch (e) {
@@ -66,7 +67,7 @@ class _PregledProjekataScreenState extends State<PregledProjekataScreen> {
                 rows: combinedLista.map((projekat) {
                   return DataRow(cells: [
                     DataCell(Text(projekat.projekat.naziv)),
-                    DataCell(Text(projekat.tim.naziv)),
+                    DataCell(Text(projekat.tim.naziv!)),
                     DataCell(
                     ElevatedButton(
                       onPressed: () {

@@ -5,13 +5,13 @@ import 'package:mobile_fitcc/providers/login_provider.dart';
 import 'base_provider.dart';
 
 class UserProvider extends BaseProvider<User> {
-  UserProvider() : super("/api/UserM");
+  UserProvider() : super("UserM");
   String name = "";
 
   Future<dynamic> getUserData() async {
     name = LoginService().getUserName();
     var url = Uri.parse(
-        "https://10.0.2.2:7038/api/UserM/GetByUsername?username=$name");
+        "https://localhost:7247/api/UserM/GetByUsername?username=$name");
     Map<String, String> headers = createHeaders();
 
     var response = await http!.get(url, headers: headers);
@@ -26,7 +26,7 @@ class UserProvider extends BaseProvider<User> {
 
   Future<User> getUser(String ime) async {
     var url = Uri.parse(
-        "https://10.0.2.2:7038/api/UserM/GetByUsername?username=$ime");
+        "https://localhost:7247/api/UserM/GetByUsername?username=$ime");
     Map<String, String> headers = createHeaders();
 
     var response = await http!.get(url, headers: headers);
@@ -42,7 +42,7 @@ class UserProvider extends BaseProvider<User> {
 
   Future<List<User>> getAllByRole(String role) async {
     var url =
-        Uri.parse("https://10.0.2.2:7038/api/UserM/getAllByRole?role=$role");
+        Uri.parse("https://localhost:7247/api/UserM/getAllByRole?role=$role");
     Map<String, String> headers = createHeaders();
 
     var response = await http!.get(url, headers: headers);
@@ -59,7 +59,7 @@ class UserProvider extends BaseProvider<User> {
 
   Future<String> getWebsite(String username) async {
     var url = Uri.parse(
-        "https://10.0.2.2:7038/api/UserM/GetWebsiteByUsername?username=$username");
+        "https://localhost:7247/api/UserM/GetWebsiteByUsername?username=$username");
 
     Map<String, String> headers = createHeaders();
 
@@ -71,7 +71,7 @@ class UserProvider extends BaseProvider<User> {
 
   Future<bool> checkRole(String username, String role) async {
     var url = Uri.parse(
-        "https://10.0.2.2:7038/api/UserM/CheckRoleByUser?username=$username&role=$role");
+        "https://localhost:7247/api/UserM/CheckRoleByUser?username=$username&role=$role");
 
     Map<String, String> headers = createHeaders();
 

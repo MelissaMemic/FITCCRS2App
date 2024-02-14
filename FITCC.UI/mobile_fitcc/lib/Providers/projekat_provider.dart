@@ -3,7 +3,7 @@ import 'package:mobile_fitcc/Models/projekat.dart';
 import 'base_provider.dart';
 
 class ProjekatProvider extends BaseProvider<Projekat> {
-  ProjekatProvider() : super("api/Projekat");
+  ProjekatProvider() : super("Projekat");
 
   @override
   Projekat fromJson(data) {
@@ -11,7 +11,7 @@ class ProjekatProvider extends BaseProvider<Projekat> {
   }
 
   Future<List<Projekat>> fetchProjekatiList() async {
-    var url = Uri.parse("https://10.0.2.2:7038/api/Projekat");
+    var url = Uri.parse("https://localhost:7247/api/Projekat");
 
     Map<String, String> headers = createHeaders();
 

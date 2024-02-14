@@ -1,40 +1,23 @@
-import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile_fitcc/Models/projekat.dart';
 
+part 'rezultat.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Rezultat {
-  late int rezultatId;
-  late int bod;
-  late String napomena;
-  late int projekatId;
-  late Projekat? projekat; 
-Rezultat();
-  Rezultat.full(
-    this.rezultatId,
+  int rezultatId;
+   int bod;
+   String napomena;
+   int projekatId;
+   Projekat projekat; 
+  Rezultat(
+ this.rezultatId,
     this.bod,
     this.napomena,
     this.projekatId,
-    this.projekat,
-  );
-
-  factory Rezultat.fromJson(Map<String, dynamic> map) {
-    return Rezultat.full(
-      map['rezultatId'],
-      map['bod'],
-      map['napomena'],
-      map['projekatId'],
-      map['projekat'] != null ? Projekat.fromJson(map['projekat']) : null,
-
+    this.projekat
     );
-  }
- Map<String, dynamic> toJson() {
-    return {
-      'bod': bod,
-      'napomena': napomena,
-      'projekatId': projekatId
-    };
-  }
-  static Rezultat rezultatFromJson(String json) {
-    final Map<String, dynamic> data = jsonDecode(json);
-    return Rezultat.fromJson(data);
-  }
+
+  factory Rezultat.fromJson(Map<String, dynamic> json) => _$RezultatFromJson(json);
+  Map<String, dynamic> toJson() => _$RezultatToJson(this);
 }

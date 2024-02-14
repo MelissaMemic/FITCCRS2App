@@ -3,10 +3,10 @@ import 'package:mobile_fitcc/Models/dogadjaj.dart';
 import 'base_provider.dart';
 
 class DogadjajProvider extends BaseProvider<Dogadjaj> {
-  DogadjajProvider() : super("/api/Dogadjaj");
+  DogadjajProvider() : super("Dogadjaj");
 
   Future<List> getDogadjeTakmicenja() async {
-    var url = Uri.parse("http://10.0.2.2:5038/api/Dogadjaj/getLast");
+    var url = Uri.parse("http://localhost:7247/api/Dogadjaj/getLast");
 
     Map<String, String> headers = createHeaders();
 

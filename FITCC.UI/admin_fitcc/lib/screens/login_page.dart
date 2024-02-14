@@ -1,9 +1,6 @@
-import 'package:admin_fitcc/models/auth_user.dart';
 import 'package:admin_fitcc/providers/auth_provider.dart';
 import 'package:admin_fitcc/utils/constraints.dart';
 import 'package:flutter/material.dart';
-
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,12 +13,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _errorMessageController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-  
   }
 
   Future _loginSubmit() async {

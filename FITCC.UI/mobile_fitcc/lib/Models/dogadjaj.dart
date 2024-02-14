@@ -1,31 +1,32 @@
-import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:mobile_fitcc/Models/agenda.dart';
+
+part 'dogadjaj.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Dogadjaj {
-  late int dogadjajId;
-  late String naziv;
-late int? trajanje;
-late DateTime? pocetak;
-late DateTime? kraj;
-  late String napomena; 
-  late int agendaId;
-  late String lokacija;
+  int dogadjajId;
+  String naziv;
+  int trajanje;
+  int agendaId;
+  DateTime pocetak;
+  DateTime kraj;
+  String napomena;
+  String lokacija;
+  Agenda agenda;
 
-  Dogadjaj(this.dogadjajId, this.naziv, this.trajanje, this.pocetak, this.kraj,
-      this.napomena, this.agendaId, this.lokacija);
+  Dogadjaj(
+     this.dogadjajId,
+      this.naziv,
+      this.trajanje,
+      this.pocetak,
+      this.kraj,
+      this.napomena,
+      this.agenda,
+      this.agendaId,
+      this.lokacija);
 
-  factory Dogadjaj.fromJson(Map<String, dynamic> map) {
-    return Dogadjaj(
-        map['dogadjajId'],
-        map['naziv'],
-        map['trajanje'],
-        DateTime.tryParse(map['pocetak']),
-        DateTime.tryParse(map['kraj']),
-        map['napomena'],
-        map['agendaId'],
-        map['lokacija']);
-  }
-
-  static Dogadjaj DogadjajFromJson(String json) {
-    final data = const JsonDecoder().convert(json);
-    return Dogadjaj.fromJson(data);
-  }
+  factory Dogadjaj.fromJson(Map<String, dynamic> json) =>
+      _$DogadjajFromJson(json);
+  Map<String, dynamic> toJson() => _$DogadjajToJson(this);
 }

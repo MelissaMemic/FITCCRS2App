@@ -16,6 +16,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Services\" />
@@ -29,6 +31,8 @@
     <None Remove="Services\ProjekatService\" />
     <None Remove="Services\RezultatService\" />
     <None Remove="Services\DogadjajService\" />
+    <None Remove="Services\RabbitMQ\" />
+    <None Remove="Services\SponzorService\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
@@ -42,6 +46,8 @@
     <Folder Include="Services\ProjekatService\" />
     <Folder Include="Services\RezultatService\" />
     <Folder Include="Services\DogadjajService\" />
+    <Folder Include="Services\RabbitMQ\" />
+    <Folder Include="Services\SponzorService\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FITCCRS2App.Models\FITCCRS2App.Models.csproj" />

@@ -4,14 +4,14 @@ import 'package:mobile_fitcc/Models/napomena.dart';
 import 'base_provider.dart';
 
 class NapomenaProvider extends BaseProvider<Napomena> {
-  NapomenaProvider() : super("api/Napomena");
+  NapomenaProvider() : super("Napomena");
 
   @override
   Napomena fromJson(data) {
     return Napomena.fromJson(data);
   }
 Future<bool> sendContactEmail(Map<String, dynamic> emailData) async {
-  var url = Uri.parse('https://10.0.2.2:7038/api/Napomena/SendContactEmail');
+  var url = Uri.parse('https://localhost:7247/api/Napomena/SendContactEmail');
   var headers = {'Content-Type': 'application/json'};
   var body = json.encode({
     'from': emailData['sender'],

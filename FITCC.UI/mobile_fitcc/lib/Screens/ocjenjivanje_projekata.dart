@@ -24,35 +24,21 @@ class _OcjenjivanjeProjektaScreenState extends State<OcjenjivanjeProjektaScreen>
     super.dispose();
   }
 
-  // void _submitForm() {
-  //   if (_formKey.currentState!.validate()) {
-  //     final resultat = RezultatInsert(
-  //       int.parse(inovacijeController.text),
-  //       napomenaController.text,
-  //       widget.projekat!.projekatId
-  //     );
-
-  //     RezultatProvider().insert(resultat);
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => PregledProjekataScreen()),
-  //     );
-  //   }
-  // }
+  
 Future<void> _spasiOcjenu() async {
-    {
-      var rezultatService = RezultatProvider();
-      Rezultat rezultat = Rezultat();
-      rezultat.bod = int.parse(inovacijeController.text);
-      rezultat.napomena = napomenaController.text;
-      rezultat.projekatId=widget.projekat!.projekatId;
-      var response = await rezultatService.insert(rezultat);
+    // {
+    //   var rezultatService = RezultatProvider();
+    //   Rezultat rezultat = Rezultat();
+    //   rezultat.bod = int.parse(inovacijeController.text);
+    //   rezultat.napomena = napomenaController.text;
+    //   rezultat.projekatId=widget.projekat!.projekatId;
+    //   var response = await rezultatService.insert(rezultat);
 
-      if (response!.toJson() != null) {
-        Navigator.pushNamed(context, '/pregledProjekataZiri');
-      } else
-        _errorMessageController.text = "Doslo je do greske";
-    }
+    //   if (response!.toJson() != null) {
+    //     Navigator.pushNamed(context, '/pregledProjekataZiri');
+    //   } else
+    //     _errorMessageController.text = "Doslo je do greske";
+    // }
   }
   @override
   Widget build(BuildContext context) {

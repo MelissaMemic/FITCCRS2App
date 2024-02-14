@@ -1,4 +1,3 @@
-import 'package:admin_fitcc/providers/login_provider.dart';
 import 'package:admin_fitcc/screens/login_page.dart';
 import 'package:admin_fitcc/screens/welcome/home_page.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Welcome to FITCC admin app',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,

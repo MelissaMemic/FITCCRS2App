@@ -66,9 +66,9 @@ Future<void> _fetchData() async {
     final emailData = {
       'sender': 'tuttoservicech@gmail.com',
       'recipient': 'mellimostar@gmail.com',
-      'subject': 'FITCC Contact proposal from ${korisnik.name} ${korisnik.lastname} ',
+      'subject': 'FITCC Contact proposal from ${korisnik.firstName} ${korisnik.lastName} ',
       'content':
-          "Dear ${widget.takmicar?.username}, this is a message proposal from FITCC sponzor ${korisnik.name} ${korisnik.lastname}: ${poruka} ",
+          "Dear ${widget.takmicar?.username}, this is a message proposal from FITCC sponzor ${korisnik.firstName} ${korisnik.lastName}: ${poruka} ",
     };
     // NapomenaProvider().sendContactEmail(emailData);
 
@@ -90,7 +90,7 @@ Future<void> _fetchData() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold( appBar: AppBar(
-        title: Text('Kontakt forma za ${widget.takmicar?.name}'), 
+        title: Text('Kontakt forma za ${widget.takmicar?.username}'), 
       ),
       body: Form(
         key: _formKey,
@@ -100,9 +100,9 @@ Future<void> _fetchData() async {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                  'Takmicar: ${widget.takmicar?.name} ${widget.takmicar?.lastname}'),
+                  'Takmicar: ${widget.takmicar?.firstName} ${widget.takmicar?.lastName}'),
                   ElevatedButton(
-            onPressed: () => _launchUrl('${widget.takmicar?.website ?? 'https://www.google.com'}'), 
+            onPressed: () => _launchUrl('${widget.takmicar?.webSite ?? 'https://www.google.com'}'), 
             child: Text('CV')),
               SizedBox(height: 20),
               TextFormField(

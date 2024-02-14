@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_fitcc/Models/auth_request.dart';
-import 'package:mobile_fitcc/Models/auth_response.dart';
-import 'package:mobile_fitcc/Providers/login_provider.dart';
+import 'package:mobile_fitcc/Providers/auth_provider.dart';
 import 'package:mobile_fitcc/constants.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,17 +13,30 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _errorMessageController = TextEditingController();
+  
+@override
+  void initState() {
+    super.initState();
+  
+  }
 
-  Future<void> _login() async {
-    {
-      var authService = LoginService();
-      AuthResponse? response = await authService.loginAction(
-          AuthRequest(_usernameController.text, _passwordController.text));
-      if (response!.result) {
-        Navigator.pushNamed(context, '/homePage');
-      } else
-        _errorMessageController.text = "Korisnicko ime ili lozinka pogresni";
+  Future _loginSubmit() async {
+    try {
+      var token = await AuthProvider().login(
+        _usernameController.text,
+        _passwordController.text,
+      );
+
+      AuthProvider().getUser(token);
+
+      if (!mounted) return;
+      Navigator.pushNamed(context, '/homePage');
+    } on Exception catch (e) {
+      final snackBar = SnackBar(
+        content: Text(e.toString()),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -157,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                _login();
+                                _loginSubmit();
                               }
                             },
                             child: const Text(

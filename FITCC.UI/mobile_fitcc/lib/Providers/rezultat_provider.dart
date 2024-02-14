@@ -11,7 +11,7 @@ class RezultatProvider extends BaseProvider<Rezultat> {
   }
 
   Future<List<Rezultat>> fetchRezultatiList() async {
-    var url = Uri.parse("https://10.0.2.2:7038/api/Rezultati");
+    var url = Uri.parse("https://localhost:7247/api/Rezultati");
 
     Map<String, String> headers = createHeaders();
 
@@ -26,7 +26,7 @@ class RezultatProvider extends BaseProvider<Rezultat> {
   }
 
   Future<List<Rezultat>> getAllRezultati() async {
-    var url = Uri.parse("https://10.0.2.2:7038/api/Rezultati/getAllRezultati");
+    var url = Uri.parse("https://localhost:7247/api/Rezultati/getAllRezultati");
 
     Map<String, String> headers = createHeaders();
 

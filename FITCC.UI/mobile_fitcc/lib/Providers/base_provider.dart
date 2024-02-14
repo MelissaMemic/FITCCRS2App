@@ -1,68 +1,32 @@
-import 'package:mobile_fitcc/providers/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:http/io_client.dart';
+import 'package:mobile_fitcc/Models/auth_user.dart';
+import 'package:mobile_fitcc/Models/paged_result.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
-  static String? _baseUrl;
-  String? _endpoint;
+  late String _baseUrl;
+  late String _endpoint;
 
   HttpClient client = new HttpClient();
-  LoginService _loginService = LoginService();
   IOClient? http;
 
   BaseProvider(String endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7038/");
-    print("baseurl: $_baseUrl");
+        defaultValue: "https://localhost:7247");
 
-    if (_baseUrl!.endsWith("/") == false) {
-      _baseUrl = _baseUrl! + "/";
+    if (_baseUrl.endsWith("/") == false) {
+      _baseUrl = _baseUrl + "/";
     }
 
     _endpoint = endpoint;
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
   }
-Future<void> delete(int id) async {
-    try {
-      _loginService.verifySession();
-      var url = "$_baseUrl$_endpoint/$id";
-      var uri = Uri.parse(url);
-
-      Map<String, String> headers = createHeaders();
-      var response = await http!.delete(uri, headers: headers);
-
-      if (!isValidResponseCode(response)) {
-        throw Exception("Failed to delete item");
-      }
-    } catch (e) {
-      print("Error deleting item: $e");
-      throw Exception("Failed to delete item");
-    }
-  }
-Future<T> getById(int id, [dynamic additionalData]) async {
- // _loginService.verifySession();
-  var url = Uri.parse("$_baseUrl$_endpoint/$id");
-
-  Map<String, String> headers = createHeaders();
-
-  var response = await http!.get(url, headers: headers);
-
-  if (isValidResponseCode(response)) {
-    var data = jsonDecode(response.body);
-    return fromJson(data);
-  } else {
-    throw Exception("Dogodila se greska");
-  }
-}
-
-
-  Future<List<T>> get([dynamic search]) async {
-    //_loginService.verifySession();
+  Future<PagedResult<T>> getAll([dynamic search]) async {
     var url = "$_baseUrl$_endpoint";
 
     if (search != null) {
@@ -72,47 +36,130 @@ Future<T> getById(int id, [dynamic additionalData]) async {
 
     var uri = Uri.parse(url);
 
-    Map<String, String> headers = createHeaders();
+    Map<String, String> headers = getHeaders();
+
     var response = await http!.get(uri, headers: headers);
 
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
-      return data.map((x) => fromJson(x)).cast<T>().toList();
+
+      var result = PagedResult<T>();
+
+      result.totalCount = data['totalCount'];
+      result.totalPages = data['totalPages'];
+      result.page = data['page'];
+      result.pageSize = data['pageSize'];
+
+      for (var item in data['result']) {
+        result.result.add(fromJson(item));
+      }
+
+      return result;
+    } else {
+      throw Exception("Response is not valid");
+    }
+  }
+
+  Future<bool> delete(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+
+    var response = await http!.delete(uri, headers: getHeaders());
+
+    if (isValidResponseCode(response)) {
+      return true;
+    } else {
+      throw Exception("Response is not valid");
+    }
+  }
+
+  Future<T> getById(int id, [dynamic additionalData]) async {
+    var url = Uri.parse("$_baseUrl$_endpoint/$id");
+
+    Map<String, String> headers = createHeaders();
+
+    var response = await http!.get(url, headers: headers);
+
+    if (isValidResponseCode(response)) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
     } else {
       throw Exception("Dogodila se greska");
     }
   }
-Future<T?> insert(dynamic request) async {
-   // _loginService.verifySession();
+
+  Future<PagedResult<T>> get([dynamic search]) async {
+    var url = "$_baseUrl$_endpoint";
+
+    if (search != null) {
+      String queryString = getQueryString(search);
+      url = url + "?" + queryString;
+    }
+
+    var uri = Uri.parse(url);
+
+    Map<String, String> headers = getHeaders();
+
+    var response = await http!.get(uri, headers: headers);
+    if (isValidResponseCode(response)) {
+      var data = jsonDecode(response.body);
+
+      var result = PagedResult<T>();
+
+      result.totalCount = data['totalCount'];
+      result.totalPages = data['totalPages'];
+      result.page = data['page'];
+      result.pageSize = data['pageSize'];
+
+      for (var item in data['result']) {
+        result.result.add(fromJson(item));
+      }
+      return result;
+    } else {
+      throw Exception("Response is not valid");
+    }
+  }
+
+  Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
 
-    Map<String, String> headers = createHeaders();
     var jsonRequest = jsonEncode(request);
-    var response = await http!.post(uri, headers: headers, body: jsonRequest);
-
-    if (isValidResponseCode(response)) {
-      var data = jsonDecode(response.body);
-      return fromJson(data) as T;
-    } else {
-      return null;
-    }
-  }
-  Future<T?> update(int id, [dynamic request]) async {
-    _loginService.verifySession();
-    var url = "$_baseUrl$_endpoint/$id";
-    var uri = Uri.parse(url);
-
-    Map<String, String> headers = createHeaders();
 
     var response =
-        await http!.put(uri, headers: headers, body: jsonEncode(request));
+        await http!.post(uri, headers: getHeaders(), body: jsonRequest);
 
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
-      return fromJson(data) as T;
+      return fromJson(data);
+    } else if (response.statusCode == 400) {
+      var data = jsonDecode(response.body);
+      throw Exception(data['message']);
     } else {
-      return null;
+      throw Exception('Failed to create object');
+    }
+  }
+
+  dynamic myDateSerializer(dynamic object) {
+    if (object is DateTime) {
+      return object.toIso8601String();
+    }
+    return object;
+  }
+
+  Future<T?> update(int id, [dynamic request]) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var jsonRequest = jsonEncode(request);
+
+    var response =
+        await http!.put(uri, headers: getHeaders(), body: jsonRequest);
+
+    if (isValidResponseCode(response)) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    } else {
+      throw Exception("Response is not valid");
     }
   }
 
@@ -123,13 +170,13 @@ Future<T?> insert(dynamic request) async {
   Map<String, String> createHeaders() {
     var headers = {
       "Content-Type": "application/json",
-      "Authorization": 'Bearer ${_loginService.getToken()}'
+      "Authorization": "Bearer ${AuthUser.token ?? ""}"
     };
     return headers;
   }
 
   String getQueryString(Map params,
-      {String prefix= '&', bool inRecursion= false}) {
+      {String prefix = '&', bool inRecursion = false}) {
     String query = '';
     params.forEach((key, value) {
       if (inRecursion) {
@@ -159,6 +206,11 @@ Future<T?> insert(dynamic request) async {
     });
     return query;
   }
+
+  Map<String, String> getHeaders() => {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${AuthUser.token ?? ""}"
+      };
 
   bool isValidResponseCode(Response response) {
     if (response.statusCode == 200) {

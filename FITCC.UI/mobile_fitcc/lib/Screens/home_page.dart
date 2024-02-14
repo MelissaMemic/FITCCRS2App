@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_fitcc/Models/auth_user.dart';
 import 'package:mobile_fitcc/Providers/login_provider.dart';
 import 'package:mobile_fitcc/Providers/user_provider.dart';
+import 'package:mobile_fitcc/Screens/Auth/login.dart';
 import 'package:mobile_fitcc/Screens/pregled_agenda.dart';
 import 'package:mobile_fitcc/Screens/preglet_takmicara.dart';
 import 'package:mobile_fitcc/Screens/agenda_screen.dart';
@@ -17,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   String name = "";
   bool isTakmicar = false;
   bool isZiri = false;
+  bool isAdmin = false;
   var userService = UserProvider();
   var currentPage = DrawerSections.pocetnaTakmicar;
   void _logout() {
@@ -32,14 +35,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchDataIsTakmicar() async {
-    var something = await userService.checkRole(name, "takmicar");
+    bool something = false;
+    if (AuthUser.roles.contains("Takmicar")) {
+      something = true;
+    }
     setState(() {
       isTakmicar = something;
     });
   }
 
+  Future<void> _fetchDataIsAdmin() async {
+    bool something = false;
+    if (AuthUser.roles.contains("Admin")) {
+      something = true;
+    }
+    setState(() {
+      isAdmin = something;
+    });
+  }
+
   Future<void> _fetchDataIsKomisija() async {
-    var something = await userService.checkRole(name, "ziri");
+    bool something = false;
+    if (AuthUser.roles.contains("Ziri")) {
+      something = true;
+    }
     setState(() {
       isZiri = something;
     });
@@ -59,19 +78,6 @@ class _HomePageState extends State<HomePage> {
     } else if (currentPage == DrawerSections.pregledAgende) {
       containter = PregledAgendaScreen();
     }
-    //else if (currentPage == DrawerSections.projekatPrjava) {
-    //   containter = HomePage();
-    // } else if (currentPage == DrawerSections.agenda) {
-    //   containter = HomePage();
-    // } else if (currentPage == DrawerSections.profil) {
-    //   containter = HomePage();
-    // } else if (currentPage == DrawerSections.cv) {
-    //   containter = HomePage();
-    // } else if (currentPage == DrawerSections.rezultat) {
-    //   containter = HomePage();
-    // } else if (currentPage == DrawerSections.pregledtimptojekat) {
-    //   containter = HomePage();
-    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +142,8 @@ class _HomePageState extends State<HomePage> {
         Container(
           child: TextButton(
               onPressed: () {
-                _logout();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const LoginScreen()));
               },
               child: Text("Logout")),
         )

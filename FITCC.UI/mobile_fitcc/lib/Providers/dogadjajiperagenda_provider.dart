@@ -4,7 +4,7 @@ import 'package:mobile_fitcc/Models/dogadjajagenda.dart';
 import 'base_provider.dart';
 
 class DogadjajPerAgendaProvider extends BaseProvider<DogadjajiPerAgenda> {
-  DogadjajPerAgendaProvider() : super("api/Dogadjaj");
+  DogadjajPerAgendaProvider() : super("Dogadjaj");
 
   @override
   DogadjajiPerAgenda fromJson(data) {
@@ -13,7 +13,7 @@ class DogadjajPerAgendaProvider extends BaseProvider<DogadjajiPerAgenda> {
 
   
   Future<List<DogadjajiPerAgenda>> fetchDogadjajperAgendaList() async {
-    var url = Uri.parse("https://10.0.2.2:7038/api/Dogadjaj/getLastAgendasDogadjaji");
+    var url = Uri.parse("https://localhost:7247/api/Dogadjaj/getLastAgendasDogadjaji");
 
     Map<String, String> headers = createHeaders();
 

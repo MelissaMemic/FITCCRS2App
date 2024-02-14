@@ -1,57 +1,42 @@
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mobile_fitcc/Models/city.dart';
+import 'package:mobile_fitcc/Models/enums/gender.dart';
 
-@JsonSerializable()
+part 'user.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class User {
-  late String name;
-  late String lastname;
-  late bool isAllowed;
-  late String username;
-  late String website;
-  late String role;
+  int userId;
+  String firstName;
+  String lastName;
+  String username;
+  Gender gender; 
+  DateTime birthDate;
+  City city;
+  City? citizenship;
+  String image;
+  String email;
+  String webSite;
+  String phone;
+  DateTime createDate;
 
-  User();
-  User.full(
-    this.name,
-    this.lastname,
-    this.isAllowed,
+  User(
+     this.userId,
+    this.firstName,
+    this.lastName,
     this.username,
-    this.website,
-    this.role
+    this.gender,
+     this.birthDate,
+    this.city,
+    this.citizenship,
+    this.image,
+    this.email ,
+    this.webSite,
+    this.phone,
+     this.createDate
   );
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User.full(
-      json['name'],
-      json['lastname'],
-      json['isAllowed'],
-      json['username'],
-      json['website'],
-      json['role']
-    );
-  }
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-
-  // factory User.fromJson(Map<String, dynamic> json) => User()
-  //   ..name = json['name'] as String
-  //   ..lastname = json['lastname'] as String
-  //   ..isAllowed = json['isAllowed'] as bool
-  //   ..username = json['username'] as String
-  //   ..website = json['website'] as String
-  //   ..role = json['role'] as String;
-
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'name': name,
-        'lastname': lastname,
-        'isAllowed': isAllowed,
-        'username': username,
-        'website': website,
-        'role': role,
-      };
-        static User fromJsonString(String jsonString) {
-    final Map<String, dynamic> data = jsonDecode(jsonString);
-    return User.fromJson(data);
-  }
-
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
