@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile_fitcc/Models/city.dart';
 import 'package:mobile_fitcc/Models/enums/gender.dart';
 
 part 'user.g.dart';
@@ -7,18 +6,16 @@ part 'user.g.dart';
 @JsonSerializable(explicitToJson: true)
 class User {
   int userId;
-  String firstName;
-  String lastName;
-  String username;
-  Gender gender; 
-  DateTime birthDate;
-  City city;
-  City? citizenship;
-  String image;
-  String email;
-  String webSite;
-  String phone;
-  DateTime createDate;
+  String? firstName;
+  String? lastName;
+  String? username;
+  Gender? gender; 
+  DateTime? birthDate;
+  String? image;
+  String? email;
+  String? webSite;
+  String? phone;
+  DateTime? createDate;
 
   User(
      this.userId,
@@ -27,8 +24,6 @@ class User {
     this.username,
     this.gender,
      this.birthDate,
-    this.city,
-    this.citizenship,
     this.image,
     this.email ,
     this.webSite,

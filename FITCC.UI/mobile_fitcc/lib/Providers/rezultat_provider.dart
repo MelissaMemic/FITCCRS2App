@@ -3,7 +3,7 @@ import 'package:mobile_fitcc/Models/rezultat.dart';
 import 'base_provider.dart';
 
 class RezultatProvider extends BaseProvider<Rezultat> {
-  RezultatProvider() : super("api/Rezultati");
+  RezultatProvider() : super("Rezultat");
 
   @override
   Rezultat fromJson(data) {

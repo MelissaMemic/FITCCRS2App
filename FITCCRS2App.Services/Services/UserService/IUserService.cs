@@ -8,5 +8,6 @@ namespace FITCCRS2App.Services.Services.UserService
     public interface IUserService : ICRUDService<User, BaseSearchObject, UserInsertRequest, UserUpdateRequest>
     {
         Task<User> GetByEmailAndPasswordAsync(string email, string password);
+        Task<List<User>> GetByRole(string role);
     }
 }

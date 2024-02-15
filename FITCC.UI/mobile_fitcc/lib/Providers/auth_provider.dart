@@ -29,7 +29,6 @@ var response = await ioClient.get(uri);
     // var response = await http.get(uri);
 
     if (_isValidResponse(response)) {
-      print(response.body);
       return response.body;
 
     } else {

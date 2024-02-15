@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_fitcc/Models/auth_user.dart';
 import 'package:mobile_fitcc/Models/napomena.dart';
 import 'package:mobile_fitcc/Models/user.dart';
 import 'package:mobile_fitcc/Providers/login_provider.dart';
 import 'package:mobile_fitcc/Providers/napomena_provider.dart';
+import 'package:mobile_fitcc/Providers/sponzor_provider.dart';
 import 'package:mobile_fitcc/Providers/user_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,7 +49,7 @@ Future<void> _fetchData() async {
     {
       var napomenaService = NapomenaProvider();
       Napomena napomena = Napomena();
-          var name = LoginService().getUserName();
+          var name = AuthUser.name!;
 
       napomena.userName = name;
       napomena.poruka = napomenaController.text;
@@ -61,21 +63,22 @@ Future<void> _fetchData() async {
     }
 
   }
-  Future<void> _sendConfirmationEmail(String poruka) async {
-    var korisnik= await userService.getUser(ime);
-    final emailData = {
-      'sender': 'tuttoservicech@gmail.com',
-      'recipient': 'mellimostar@gmail.com',
-      'subject': 'FITCC Contact proposal from ${korisnik.firstName} ${korisnik.lastName} ',
-      'content':
-          "Dear ${widget.takmicar?.username}, this is a message proposal from FITCC sponzor ${korisnik.firstName} ${korisnik.lastName}: ${poruka} ",
-    };
-    // NapomenaProvider().sendContactEmail(emailData);
 
-    var response = await napomenaService.sendContactEmail(emailData);
+  Future<void> _sendConfirmationEmail(String poruka) async {
+    // var korisnik= await userService.getById(AuthUser.id!);
+    final emailData = {
+      'sender': 'mellimostar@gmail.com',
+      'recipient': 'tuttoservicech@gmail.com',
+      'subject': 'FITCC Contact proposal from ${AuthUser.name} ',
+      'content':
+          "Dear ${widget.takmicar?.username}, this is a message proposal from FITCC sponzor ${AuthUser.email} ${AuthUser.name}: ${poruka} ",
+    };
+    var response = await SponzorProvider().sendContactEmail(emailData);
+
+    // var response = await napomenaService.sendContactEmail(emailData);
 
       if (response) {
-        Navigator.pushNamed(context, '/pregledTakmicara');
+        Navigator.pushNamed(context, '/homePage');
       } else
         _errorMessageController.text = "Doslo je do greske";
     

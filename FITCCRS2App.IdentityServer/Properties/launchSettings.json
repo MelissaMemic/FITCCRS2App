@@ -21,8 +21,8 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
       "environmentVariables": {},
-      "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "publishAllPorts": true
     },
     "FITCCRS2App.IdentityServer": {
       "commandName": "Project",

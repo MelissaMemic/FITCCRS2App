@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile_fitcc/Models/takmicenje.dart';
 
 part 'tim.g.dart';
 
@@ -9,14 +8,14 @@ class Tim {
     String? naziv;
     int? brojClanova;
     int? takmicenjeId;
-    Takmicenje takmicenje;
+    // Takmicenje takmicenje;
 
   Tim(
      this.timId,
      this.naziv,
      this.brojClanova,
      this.takmicenjeId,
-     this.takmicenje,
+    //  this.takmicenje,
   );
 
   factory Tim.fromJson(Map<String, dynamic> json) => _$TimFromJson(json);

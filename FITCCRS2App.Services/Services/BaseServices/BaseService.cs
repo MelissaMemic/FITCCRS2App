@@ -51,6 +51,12 @@ namespace FITCCRS2App.Services.Services.BaseServices
                 specificQuery = specificQuery.Include(x => x.Projekat); 
                 return specificQuery as IQueryable<TDb>;
             }
+            else if (typeof(TDb) == typeof(Database.Projekat))
+            {
+                var specificQuery = query as IQueryable<Database.Projekat>;
+                specificQuery = specificQuery.Include(x => x.Tim);
+                return specificQuery as IQueryable<TDb>;
+            }
             return query;
         }
 

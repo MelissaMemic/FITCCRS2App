@@ -20,7 +20,7 @@ class _PregledTakmicaraScreenState extends State<PregledTakmicaraScreen> {
   Future<void> _fetchUserData() async {
     try {
       List<User> fetchedTakmicari =
-          await UserProvider().getAllByRole("takmicar");
+          await UserProvider().getAllByRole("Takmicar");
       setState(() {
         korisnici = fetchedTakmicari;
       });
@@ -32,41 +32,26 @@ class _PregledTakmicaraScreenState extends State<PregledTakmicaraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-          ),
-          Expanded(
-            child: DataTable(
-              columns: [
-                DataColumn(label: Text('Ime Prezime')),
-                DataColumn(label: Text('Webb')),
-                DataColumn(label: Text(' ')),
-              ],
-              rows: korisnici.map((korisnik) {
-                return DataRow(cells: [
-                  DataCell(Text('${korisnik.firstName} - ${korisnik.lastName}')),
-                  DataCell(Text(korisnik.webSite)),
-                  DataCell(
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  TakmicarDetaljiScreen(takmicar: korisnik)),
-                        );
-                      },
-                      child: Text('CV'),
-                    ),
+      body: ListView.builder(
+        itemCount: korisnici.length,
+        itemBuilder: (context, index) {
+          final user = korisnici[index];
+          return ListTile(
+            title: Text('${user.firstName} ${user.lastName}'),
+            subtitle: Text(user.webSite ?? 'N/A'),
+            trailing: IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TakmicarDetaljiScreen(takmicar: user),
                   ),
-                ]);
-              }).toList(),
+                );
+              },
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

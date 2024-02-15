@@ -11,7 +11,6 @@ namespace FITCCRS2App.Models.Models
         public string Username { get; set; } = string.Empty;
 
         public virtual Takmicenje Takmicenje { get; set; } = new();
-        //public virtual ICollection<Projekat> Projekats { get; set; }
     }
 }
 

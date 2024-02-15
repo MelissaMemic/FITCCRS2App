@@ -1,6 +1,5 @@
 import 'package:admin_fitcc/models/kategorija.dart';
 import 'package:admin_fitcc/models/paged_result.dart';
-import 'package:admin_fitcc/models/projekat.dart';
 import 'package:admin_fitcc/models/rezultat.dart';
 import 'package:admin_fitcc/providers/rezultat_provider.dart';
 import 'package:admin_fitcc/providers/kategorija_provider.dart';
@@ -13,7 +12,6 @@ class RezultatiList extends StatefulWidget {
 
 class _RezultatiListState extends State<RezultatiList> {
   List<Rezultat> rezultatiList = [];
-  List<Projekat> projectsList = [];
   List<Kategorija> kategorijeOptions = [];
   String selectedKategorija = 'All';
   Kategorija? latestKategorija;

@@ -26,6 +26,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
   }
+
   Future<PagedResult<T>> getAll([dynamic search]) async {
     var url = "$_baseUrl$_endpoint";
 
@@ -73,18 +74,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<T> getById(int id, [dynamic additionalData]) async {
-    var url = Uri.parse("$_baseUrl$_endpoint/$id");
+  Future<T> getById(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
 
-    Map<String, String> headers = createHeaders();
-
-    var response = await http!.get(url, headers: headers);
+    var response = await http!.get(uri, headers: getHeaders());
 
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {
-      throw Exception("Dogodila se greska");
+      throw Exception("Response is not valid");
     }
   }
 
@@ -132,14 +132,14 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
       return fromJson(data);
-    } else if (response.statusCode == 400) {
-      var data = jsonDecode(response.body);
-      throw Exception(data['message']);
-    } else {
-      throw Exception('Failed to create object');
-    }
+    } else if (response.statusCode == 400){
+    var data = jsonDecode(response.body);
+    throw Exception(data['message']);
+    }else {
+    throw Exception('Failed to create object');
   }
 
+  }
   dynamic myDateSerializer(dynamic object) {
     if (object is DateTime) {
       return object.toIso8601String();

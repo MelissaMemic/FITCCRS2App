@@ -6,27 +6,28 @@ namespace FITCCRS2App.Models.Models
 	{
         public int UserId { get; set; }
 
-        public string FirstName { get; set; } = string.Empty;
+        public string FirstName { get; set; }
 
-        public string LastName { get; set; } = string.Empty;
+        public string LastName { get; set; }
 
         public Gender Gender { get; set; }
 
         public DateTime BirthDate { get; set; }
 
-        public City? City { get; set; } = new();
+        //public City? City { get; set; } 
 
-        public Country? Citizenship { get; set; } = new();
+        //public Country? Citizenship { get; set; } 
 
-        public string Image { get; set; } = string.Empty;
+        public string Image { get; set; } 
+        public string WebSite { get; set; }
 
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } 
 
-        public string Phone { get; set; } = string.Empty;
+        public string Phone { get; set; } 
 
         public DateTime CreateDate { get; set; }
 
-        public List<Role> Roles { get; set; } = new();
+        public List<Role> Roles { get; set; } 
 
     }
 }

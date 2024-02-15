@@ -1,5 +1,5 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
+using FITCCRS2App.Models.Enums;
 using FITCCRS2App.Models.Helpers;
 using FITCCRS2App.Models.RequestObjects;
 using FITCCRS2App.Models.SearchObjects;
@@ -28,6 +28,24 @@ namespace FITCCRS2App.Services.Services.UserService
                 );
 
             return _mapper.Map<Models.Models.User>(user);
+        }
+        public async Task<List<Models.Models.User>> GetByRole(string role)
+        {
+            Role roleEnum;
+            bool isParsed = Enum.TryParse(role, out roleEnum);
+
+            if (!isParsed)
+            {
+                return new List<Models.Models.User>(); 
+            }
+
+            var users = await _context
+                .Users
+                .Include(x => x.Roles)
+                .Where(x => x.Roles.Any(r => r.Role == roleEnum))
+                .ToListAsync();
+
+            return _mapper.Map<List<Models.Models.User>>(users);
         }
     }
 }

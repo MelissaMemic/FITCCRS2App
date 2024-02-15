@@ -8,11 +8,11 @@ namespace FITCCRS2App.Services.Database
     {
         [Key]
         public int RezultatId { get; set; }
-        public string? Napomena { get; set; }
+        public string Napomena { get; set; } 
         public int Bod { get; set; }
 
         [ForeignKey("Projekat")]
-        public int ProjekatId { get; set; }
-        public virtual Projekat Projekat { get; set; } = null!;
+        public int? ProjekatId { get; set; }
+        public virtual Projekat? Projekat { get; set; } 
     }
 }

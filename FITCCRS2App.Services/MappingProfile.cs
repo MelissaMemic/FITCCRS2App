@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FITCCRS2App.Models.Models;
+using FITCCRS2App.Models.Models.RequestObjects;
 using FITCCRS2App.Models.RequestObjects;
 
 namespace FITCCRS2App.Services
@@ -20,11 +21,17 @@ namespace FITCCRS2App.Services
             CreateMap<Database.Napomena, Models.Models.Napomena>();
             CreateMap<Database.Predavac, Models.Models.Predavac>();
             CreateMap<Database.PredavacDogadjaj, Models.Models.PredavacDogadjaj>();
-            CreateMap<Database.Projekat, Models.Models.Projekat>();
+            CreateMap<Database.Projekat, Models.Models.Projekat>()
+    .ForMember(x => x.TimId, opt => opt.MapFrom((src, dest) => src.Tim?.TimId))
+    .ForMember(dest => dest.Tim, opt => opt.MapFrom(src => src.Tim))
+    .ForMember(dest => dest.Naziv, opt => opt.MapFrom(src => src.Naziv))
+    .ForMember(dest => dest.ProjekatId, opt => opt.MapFrom(src => src.ProjekatId))
+    .ForMember(dest => dest.KategorijaId, opt => opt.MapFrom(src => src.KategorijaId))
+    .ForMember(dest => dest.Opis, opt => opt.MapFrom(src => src.Opis));
 
             CreateMap<Database.Rezultat, Models.Models.Rezultat>()
                 .ForMember(x => x.ProjekatId, opt => opt.MapFrom((src, dest) => src.Projekat?.ProjekatId))
-                .ForMember(dest => dest.Projekat, opt => opt.MapFrom(src => src.Projekat))
+                //.ForMember(dest => dest.Projekat, opt => opt.MapFrom(src => src.Projekat))
                 .ForMember(dest => dest.Bod, opt => opt.MapFrom(src => src.Bod))
                 .ForMember(dest => dest.RezultatId, opt => opt.MapFrom(src => src.RezultatId))
                 .ForMember(dest => dest.Napomena, opt => opt.MapFrom(src => src.Napomena));
@@ -33,7 +40,9 @@ namespace FITCCRS2App.Services
             CreateMap<KomisijaInsertRequest, Database.Komisija>();
             CreateMap<DogadjajInsertRequest, Database.Dogadjaj>();
             CreateMap<DogadjajUpdateRequest, Database.Dogadjaj>();
-            
+            CreateMap<RezultatUpsertRequest, Database.Rezultat>();
+
+
             CreateMap<Database.Skategorije, Models.Models.SKategorije>();
             CreateMap<Database.Sponzor, Models.Models.Sponzor>();
             CreateMap<Database.Takmicenje, Models.Models.Takmicenje>();
@@ -41,13 +50,19 @@ namespace FITCCRS2App.Services
             CreateMap<AgendaUpsertRequest, Database.Agendum>();
             CreateMap<TakmicenjeUpsertRequest, Database.Takmicenje>();
             CreateMap<Database.User, Models.Models.User>()
-                .ForMember(x => x.Roles, opt => opt.MapFrom(y => y.Roles.Select(z => z.Role)));
+                .ForMember(x => x.Roles, opt => opt.MapFrom(y => y.Roles.Select(z => z.Role)))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+                .ForMember(dest => dest.WebSite, opt => opt.MapFrom(src => src.WebSite))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                ;
 
-            CreateMap<Models.Models.User, Database.User>()
-                .ForMember(x => x.CityId, opt => opt.MapFrom((src, dest) => src.City?.CityId))
-                .ForMember(x => x.City, opt => opt.Ignore())
-                .ForMember(x => x.CitizenshipId, opt => opt.MapFrom((src, dest) => src.Citizenship?.CountryId))
-                .ForMember(x => x.Citizenship, opt => opt.Ignore());
+            CreateMap<Models.Models.User, Database.User>();
 
             CreateMap<Database.UserRole, Models.Models.UserRole>();
 

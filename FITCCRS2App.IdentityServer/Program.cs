@@ -30,11 +30,6 @@ builder.Services.AddTransient<ITakmicenjeService, TakmicenjeService>();
 builder.Services.AddTransient<IAgendaService, AgendaService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
-//builder.Services.AddScopedRepositories();
-//builder.Services.AddScopedServices();
-//builder.Services.AddScopedNotificationServices();
-//builder.Services.AddScopedStates();
-
 builder.Services.AddControllers();
 
 var app = builder.Build();

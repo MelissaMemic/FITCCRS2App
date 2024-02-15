@@ -2,9 +2,9 @@
 {
     public class RezultatUpsertRequest
 	{
-		public RezultatUpsertRequest()
-		{
-		}
-	}
+        public string? Napomena { get; set; }
+        public int? Bod { get; set; }
+        public int? ProjekatId { get; set; }
+    }
 }
 

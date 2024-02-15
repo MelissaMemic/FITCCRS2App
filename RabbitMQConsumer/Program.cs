@@ -4,7 +4,7 @@ using RabbitMQConsumer;
 using System.Text;
 var factory = new ConnectionFactory
 {
-    HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "rabbitmq",
+    HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost",
     Port = int.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672"),
     UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
     Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest",

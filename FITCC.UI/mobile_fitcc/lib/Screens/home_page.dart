@@ -102,10 +102,10 @@ class _HomePageState extends State<HomePage> {
       child: Column(children: [
         menuItem(1, "Pocetna",
             currentPage == DrawerSections.pocetnaTakmicar ? true : false),
-        if (isAdmin)
+        if (AuthUser.roles.contains("Takmicar"))
           menuItem(2, "Tim",
               currentPage == DrawerSections.takmicenjePrijava ? true : false),
-        if (AuthUser.roles.contains("Admin"))
+        if (AuthUser.roles.contains("Takmicar"))
           menuItem(3, "Projekat",
               currentPage == DrawerSections.projekatPrjava ? true : false),
         menuItem(
@@ -114,23 +114,23 @@ class _HomePageState extends State<HomePage> {
             currentPage == DrawerSections.pregledTakmicara ? true : false),
         menuItem(6, "Moj profil",
             currentPage == DrawerSections.profil ? true : false),
-        if (AuthUser.roles.contains("Admin"))
+        if (AuthUser.roles.contains("Ziri"))
           menuItem(
               10,
               "Pregled projekata",
               currentPage == DrawerSections.pregledProjekataZiri
                   ? true
                   : false),
-        if (AuthUser.roles.contains("Admin"))
+        if (AuthUser.roles.contains("Ziri"))
           menuItem(12, "Pregled agende",
               currentPage == DrawerSections.pregledAgende ? true : false),
-        if (AuthUser.roles.contains("Admin"))
+        if (AuthUser.roles.contains("Takmicar"))
           menuItem(
               7, "Moj CV", currentPage == DrawerSections.cv ? true : false),
-        if (isZiri)
+        if (AuthUser.roles.contains("Ziri"))
           menuItem(8, "Ocjene",
               currentPage == DrawerSections.rezultat ? true : false),
-        if (isTakmicar)
+        if (AuthUser.roles.contains("Takmicar"))
           menuItem(9, "Pregled prijava",
               currentPage == DrawerSections.pregledtimptojekat ? true : false),
         Container(

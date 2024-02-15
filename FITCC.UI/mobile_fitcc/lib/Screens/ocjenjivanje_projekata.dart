@@ -1,21 +1,22 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_fitcc/Models/projekat.dart';
-import 'package:mobile_fitcc/Models/rezultat.dart';
+import 'package:mobile_fitcc/Models/requests/upsert_rezultat.dart';
 import 'package:mobile_fitcc/Providers/rezultat_provider.dart';
 
-  class OcjenjivanjeProjektaScreen extends StatefulWidget {
-   final Projekat? projekat;
+class OcjenjivanjeProjektaScreen extends StatefulWidget {
+  final Projekat? projekat;
   OcjenjivanjeProjektaScreen({this.projekat});
 
   @override
-  _OcjenjivanjeProjektaScreenState createState() => _OcjenjivanjeProjektaScreenState();
+  _OcjenjivanjeProjektaScreenState createState() =>
+      _OcjenjivanjeProjektaScreenState();
 }
-class _OcjenjivanjeProjektaScreenState extends State<OcjenjivanjeProjektaScreen> {
+
+class _OcjenjivanjeProjektaScreenState
+    extends State<OcjenjivanjeProjektaScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController inovacijeController = TextEditingController();
   final TextEditingController napomenaController = TextEditingController();
-  TextEditingController _errorMessageController = TextEditingController();
 
   @override
   void dispose() {
@@ -24,27 +25,25 @@ class _OcjenjivanjeProjektaScreenState extends State<OcjenjivanjeProjektaScreen>
     super.dispose();
   }
 
-  
-Future<void> _spasiOcjenu() async {
-    // {
-    //   var rezultatService = RezultatProvider();
-    //   Rezultat rezultat = Rezultat();
-    //   rezultat.bod = int.parse(inovacijeController.text);
-    //   rezultat.napomena = napomenaController.text;
-    //   rezultat.projekatId=widget.projekat!.projekatId;
-    //   var response = await rezultatService.insert(rezultat);
+  Future<void> _spasiOcjenu() async {
+    try {
+      RezultatUpsertRequest ocjena = RezultatUpsertRequest(
+          int.parse(inovacijeController.text),
+          napomenaController.text,
+          widget.projekat!.projekatId);
 
-    //   if (response!.toJson() != null) {
-    //     Navigator.pushNamed(context, '/pregledProjekataZiri');
-    //   } else
-    //     _errorMessageController.text = "Doslo je do greske";
-    // }
+      await RezultatProvider().insert(ocjena);
+      Navigator.pop(context);
+    } catch (e) {
+      print('Error inserting Rezultat data: $e');
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ocjenjivanje ${widget.projekat?.naziv}'), 
+        title: Text('Ocjenjivanje ${widget.projekat?.naziv}'),
       ),
       body: Form(
         key: _formKey,
@@ -57,7 +56,7 @@ Future<void> _spasiOcjenu() async {
               SizedBox(height: 20),
               TextFormField(
                 controller: inovacijeController,
-                decoration: InputDecoration(labelText: 'Inovacije'),
+                decoration: InputDecoration(labelText: 'Bodovi'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -77,13 +76,12 @@ Future<void> _spasiOcjenu() async {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                child: Text('Ocijeni'),
-
-                onPressed:() {
-                        if (_formKey.currentState!.validate()) {
-                          _spasiOcjenu();
-                        }}
-              ),
+                  child: Text('Ocijeni'),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _spasiOcjenu();
+                    }
+                  }),
             ],
           ),
         ),

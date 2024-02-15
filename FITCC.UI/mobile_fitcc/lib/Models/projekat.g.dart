@@ -12,6 +12,7 @@ Projekat _$ProjekatFromJson(Map<String, dynamic> json) => Projekat(
       json['opis'] as String,
       json['kategorijaId'] as int,
       json['timId'] as int,
+      Tim.fromJson(json['tim'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ProjekatToJson(Projekat instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$ProjekatToJson(Projekat instance) => <String, dynamic>{
       'opis': instance.opis,
       'kategorijaId': instance.kategorijaId,
       'timId': instance.timId,
+      'tim': instance.tim.toJson(),
     };

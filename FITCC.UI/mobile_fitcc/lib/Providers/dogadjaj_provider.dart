@@ -4,6 +4,11 @@ import 'base_provider.dart';
 
 class DogadjajProvider extends BaseProvider<Dogadjaj> {
   DogadjajProvider() : super("Dogadjaj");
+  @override
+  Dogadjaj fromJson(data) {
+    return Dogadjaj.fromJson(data);
+  }
+
 
   Future<List> getDogadjeTakmicenja() async {
     var url = Uri.parse("http://localhost:7247/api/Dogadjaj/getLast");
