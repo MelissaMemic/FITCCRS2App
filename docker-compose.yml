@@ -1,0 +1,107 @@
+version: '3'
+services:
+#mssql docker
+  fitcc-sql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pass123!!
+      - MSSQL_PID=Developer
+    ports:
+      - 1435:1433
+    expose:
+        - 1433
+    networks:
+      - fitccnetwork
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - fitccnetwork  
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+    fitccrs2app.identityserver:
+      container_name: FITCCRS2App.IdentityServer
+    build:
+      context: .
+      dockerfile: fitccrs2app.IdentityServer/Dockerfile
+      environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=${IS_HTTPS_PORT}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass@*****
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=certificate.pfx
+      - ConnectionStrings:fitccrs2app_Database=Server=fitccrs2app.sql,1433;Database=RS190039;Trusted_Connection=False;Encrypt=False;User=SA;Password=Pass123!!;
+      - JWTSecret=${IS_JWT_SECRET}
+      ports:
+      - ${IS_PORT}:80
+      - ${IS_HTTPS_PORT}:443
+    depends_on:
+      - fitccrs2app.sql
+
+  fitccrs2app.api:
+    container_name: fitccrs2app.API
+    build:
+      context: .
+      dockerfile: fitccrs2app/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORT=${API_HTTPS_PORT}
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Pass@*****
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=certificate.pfx
+      - ConnectionStrings:fitccrs2app_Database=Server=fitccrs2app.sql,1433;Database=RS190039;Trusted_Connection=False;Encrypt=False;User=SA;Password=Pass123!!;
+      - IdentityServerUrl=https://fitccrs2app.identityserver
+      - IdentityServerMetaDataUrl=http://fitccrs2app.identityserver/.well-known/openid-configuration
+      - IdentityServerJWTSecret=${IS_JWT_SECRET}
+      - RabbitMQ:Host=fitccrs2app.rabbitmq
+      - RabbitMQ:Port=rabbitmq
+      - RabbitMQ:User=guest
+      - RabbitMQ:Password=guest
+    ports:
+      - ${API_PORT}:80
+      - ${API_HTTPS_PORT}:443
+    depends_on:
+      - fitccrs2app.sql
+      - fitccrs2app.rabbitmq
+      - fitccrs2app.smtp
+      - fitccrs2app.identityserver
+
+  rabbitmq-service:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./FITCCRS2.RabbitMQ/Dockerfile
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - SMTP_SERVER=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=mellimostar@gmail.com
+      - SMTP_PASSWORD=ttydocdytcokyeru
+      - API_HOST=localhost
+      - API_PORT=7125
+    depends_on:
+      - rabbitmq
+      - fitcc-api
+      - fitcc-sql
+    networks:
+      - fitccnetwork
+      
+volumes:
+  rabbitmq_data:
+
+networks:
+  fitccnetwork:
+    driver: bridge 
