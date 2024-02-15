@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:mobile_fitcc/Models/auth_user.dart';
 import 'package:mobile_fitcc/Models/constraints/claim_type.dart';
 
@@ -11,17 +13,25 @@ class AuthProvider with ChangeNotifier {
   AuthProvider() {
     _baseUrl = const String.fromEnvironment(
       "IdentityServerUrl",
-      defaultValue: "https://localhost:5001/",
+      defaultValue: "https://127.0.0.1:5001/",
     );
   }
 
   Future<String> login(String email, String password) async {
+    HttpClient httpClient = new HttpClient()
+  ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     var uri = Uri.parse('${_baseUrl}login?email=$email&password=$password');
 
-    var response = await http.get(uri);
+var ioClient = new IOClient(httpClient);
+var response = await ioClient.get(uri);
+
+
+    // var response = await http.get(uri);
 
     if (_isValidResponse(response)) {
+      print(response.body);
       return response.body;
+
     } else {
       throw Exception("Response is not valid");
     }

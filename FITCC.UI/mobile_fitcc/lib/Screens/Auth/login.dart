@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_fitcc/Models/auth_user.dart';
 import 'package:mobile_fitcc/Providers/auth_provider.dart';
 import 'package:mobile_fitcc/constants.dart';
 
@@ -28,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       AuthProvider().getUser(token);
-
       if (!mounted) return;
       Navigator.pushNamed(context, '/homePage');
     } on Exception catch (e) {

@@ -16,22 +16,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String name = "";
   bool isTakmicar = false;
   bool isZiri = false;
   bool isAdmin = false;
-  var userService = UserProvider();
   var currentPage = DrawerSections.pocetnaTakmicar;
-  void _logout() {
-    LoginService().setResponseFalse();
-    Navigator.pushNamed(context, '/login');
-  }
 
   @override
   void initState() {
-    name = LoginService().getUserName();
     _fetchDataIsTakmicar();
     _fetchDataIsKomisija();
+    _fetchDataIsAdmin();
   }
 
   Future<void> _fetchDataIsTakmicar() async {
@@ -108,10 +102,10 @@ class _HomePageState extends State<HomePage> {
       child: Column(children: [
         menuItem(1, "Pocetna",
             currentPage == DrawerSections.pocetnaTakmicar ? true : false),
-        if (isTakmicar)
+        if (isAdmin)
           menuItem(2, "Tim",
               currentPage == DrawerSections.takmicenjePrijava ? true : false),
-        if (isTakmicar)
+        if (AuthUser.roles.contains("Admin"))
           menuItem(3, "Projekat",
               currentPage == DrawerSections.projekatPrjava ? true : false),
         menuItem(
@@ -120,17 +114,17 @@ class _HomePageState extends State<HomePage> {
             currentPage == DrawerSections.pregledTakmicara ? true : false),
         menuItem(6, "Moj profil",
             currentPage == DrawerSections.profil ? true : false),
-        if (isZiri)
+        if (AuthUser.roles.contains("Admin"))
           menuItem(
               10,
               "Pregled projekata",
               currentPage == DrawerSections.pregledProjekataZiri
                   ? true
                   : false),
-        if (isZiri)
+        if (AuthUser.roles.contains("Admin"))
           menuItem(12, "Pregled agende",
               currentPage == DrawerSections.pregledAgende ? true : false),
-        if (isTakmicar)
+        if (AuthUser.roles.contains("Admin"))
           menuItem(
               7, "Moj CV", currentPage == DrawerSections.cv ? true : false),
         if (isZiri)
