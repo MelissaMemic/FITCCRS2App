@@ -1,4 +1,5 @@
 import 'package:admin_fitcc/models/kategorija.dart';
+import 'package:admin_fitcc/models/paged_result.dart';
 import 'package:admin_fitcc/models/projekat.dart';
 import 'package:admin_fitcc/models/tim.dart';
 import 'package:admin_fitcc/providers/kategorija_provider.dart';
@@ -27,10 +28,10 @@ class _TimListState extends State<TimList> {
   }
 Future<void> _fetchKategorijeOptions() async {
     try {
-      List<Kategorija> fetchedKategorijeOptions =
-          await KategorijaProvider().getKategorije();
+      PagedResult<Kategorija> fetchedKategorijeOptions =
+          await KategorijaProvider().get();
       setState(() {
-        kategorijeOptions.addAll(fetchedKategorijeOptions);
+        kategorijeOptions=fetchedKategorijeOptions.result;
       });
     } catch (e) {
       print('Error fetching Kategorije options: $e');
@@ -38,9 +39,9 @@ Future<void> _fetchKategorijeOptions() async {
   }
   Future<void> _fetchTeamsData() async {
     try {
-      List<Tim> fetchedTeamsList = await TimProvider().getAllTimData();
+      PagedResult<Tim> fetchedTeamsList = await TimProvider().get();
       setState(() {
-        teamsList = fetchedTeamsList;
+        teamsList = fetchedTeamsList.result;
       });
     } catch (e) {
       print('Error fetching Teams data: $e');
@@ -49,25 +50,42 @@ Future<void> _fetchKategorijeOptions() async {
 
   Future<void> _fetchProjectsData() async {
     try {
-      List<Projekat> fetchedProjectsList =
-          await ProjekatProvider().fetchProjekatiList();
+      PagedResult<Projekat> fetchedProjectsList =
+          await ProjekatProvider().get();
       setState(() {
-        projectsList = fetchedProjectsList;
+        projectsList = fetchedProjectsList.result;
       });
     } catch (e) {
       print('Error fetching Projects data: $e');
     }
   }
+List<Map<String, dynamic>> _getJoinedData() {
+    return teamsList.map((tim) {
+      Projekat? project = projectsList.firstWhere(
+        (proj) => proj.timId == tim.timId
+        
+      );
+      return {
+        'tim': tim,
+        'timId': tim.timId,
+        'projectnaziv': project != null ? project.naziv : 'N/A',
+        'projectKategorija': project != null ? project.kategorijaId.toString() : 'N/A',
+      };
+    }).toList();
+  }
+
+  List<Map<String, dynamic>> _getFilteredData() {
+    var allData = _getJoinedData();
+    if (selectedKategorija == 'All') {
+      return allData;
+    } else {
+      return allData.where((data) => data['projectKategorija'] == selectedKategorija).toList();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-   
-    // List<Tim> filteredTeamsList = teamsList
-    // .where((tim) => 
-    //     selectedKategorija == "All" || 
-    //     tim.projekats.any((projekat) => projekat.kategorijaId.toString() == selectedKategorija)
-    // )
-    // .toList();
+       var filteredData = _getFilteredData();
 
     return Scaffold(
       appBar: AppBar(
@@ -99,22 +117,42 @@ Future<void> _fetchKategorijeOptions() async {
               ],
             ),
           ),
-          //  Expanded(
-          //   child: DataTable(
-          //     columns: [
-          //       DataColumn(label: Text('Tim Naziv')),
-          //       DataColumn(label: Text('Broj clanova')),
-          //     ],
-          //     rows: filteredTeamsList.map((tim) {
-          //       return DataRow(cells: [
-          //         DataCell(Text(tim.naziv)),
-          //         DataCell(Text(tim.brojClanova.toString())),
-          //       ]);
-          //     }).toList(),
-          //   )
-          // ),
+         Expanded(
+            child: DataTable(
+              columns: const [
+                DataColumn(label: Text('Tim Naziv')),
+                DataColumn(label: Text('Kategorija Projekta')),
+                DataColumn(label: Text('')),
+              ],
+              rows: filteredData.map((data) {
+                return DataRow(cells: [
+                  DataCell(Text(data['tim'].naziv)),
+                  DataCell(Text(data['projectnaziv'])),
+                  
+                  DataCell(
+                    ElevatedButton(
+                      onPressed: () {
+                        _deleteTim(data['timId']); 
+                      },
+                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      child: Text('Izbrisi'),
+                    ),
+                  ),
+                ]);
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );
   }
+   Future<void> _deleteTim(int timId) async {
+    try {
+          await TimProvider().delete(timId);
+          _fetchTeamsData();
+    } catch (e) {
+      print('Error deleting Tim: $e');
+    }
+  }
+
 }

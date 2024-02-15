@@ -2,6 +2,7 @@ import 'package:admin_fitcc/models/kriterij.dart';
 import 'package:admin_fitcc/models/paged_result.dart';
 import 'package:admin_fitcc/models/requests/upsert_kriterij.dart';
 import 'package:admin_fitcc/providers/kriterij_provider.dart';
+import 'package:admin_fitcc/screens/welcome/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_fitcc/models/kategorija.dart';
 import 'package:admin_fitcc/providers/kategorija_provider.dart';
@@ -56,12 +57,21 @@ class _KriterijAddState extends State<KriterijAdd> {
       if (widget.kriterij != null) {
         
         await KriterijProvider().update(widget.kriterij!.kriterijId,kriterij );
-                Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>MyHomePage(),
+      ),
+    );
 
       } else {
         await KriterijProvider().insert(kriterij );
-                Navigator.pop(context);
-
+ Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>MyHomePage(),
+      ),
+    );
       }
     } catch (e) {
       print('Error inserting Kriterij data: $e');

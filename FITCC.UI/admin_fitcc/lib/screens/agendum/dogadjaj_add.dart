@@ -91,8 +91,8 @@ class _DogadjajAddState extends State<DogadjajAdd> {
           int.parse(trajanjeController.text),
           DateTime.now(),
           DateTime.now(),
-          'napomena',
-          1,
+          napomenaController.text,
+          selectedAgendaId!,
           lokacijaController.text,
         );
 

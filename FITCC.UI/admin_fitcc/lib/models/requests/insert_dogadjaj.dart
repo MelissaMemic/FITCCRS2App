@@ -3,13 +3,13 @@ part 'insert_dogadjaj.g.dart';
 
 @JsonSerializable()
 class DogadjajInsertRequest {
-  String naziv;
-  int trajanje;
-  int agendaId;
-  DateTime pocetak;
-  DateTime kraj;
+  String? naziv;
+  int? trajanje;
+  int? agendaId;
+  DateTime? pocetak;
+  DateTime? kraj;
   String? napomena;
-  String lokacija;
+  String? lokacija;
 
 
   DogadjajInsertRequest(

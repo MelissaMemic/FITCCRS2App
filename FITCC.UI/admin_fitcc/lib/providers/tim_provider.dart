@@ -3,7 +3,7 @@ import 'package:admin_fitcc/models/tim.dart';
 import 'base_provider.dart';
 
 class TimProvider extends BaseProvider<Tim> {
-  TimProvider() : super("api/Tim");
+  TimProvider() : super("Tim");
 
   @override
   Tim fromJson(data) {

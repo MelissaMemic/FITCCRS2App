@@ -16,6 +16,7 @@ using FITCCRS2App.Services.Services.KategorijaService;
 using FITCCRS2App.Services.Services.ProjekatService;
 using FITCCRS2App.Services.Services.RezultatService;
 using FITCCRS2App.Services.Services.DogadjajService;
+using FITCCRS2App.Services.Services.TimService;
 using FITCCRS2App.Services.Services.SponzorService;
 using FITCCRS2App.Services.Services.RabbitMQ;
 
@@ -49,6 +50,7 @@ builder.Services.AddTransient<IProjekatService, ProjekatService>();
 builder.Services.AddTransient<IRezultatService, RezultatService>();
 builder.Services.AddTransient<IDogadjajService, DogadjajService>();
 builder.Services.AddTransient<ISponzorService, SponzorService>();
+builder.Services.AddTransient<ITimService, TimService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 

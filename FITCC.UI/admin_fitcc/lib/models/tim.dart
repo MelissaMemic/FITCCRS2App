@@ -9,14 +9,14 @@ class Tim {
     String? naziv;
     int? brojClanova;
     int? takmicenjeId;
-    Takmicenje takmicenje;
+    // Takmicenje takmicenje;
 
   Tim(
      this.timId,
      this.naziv,
      this.brojClanova,
      this.takmicenjeId,
-     this.takmicenje,
+    //  this.takmicenje,
   );
 
   factory Tim.fromJson(Map<String, dynamic> json) => _$TimFromJson(json);

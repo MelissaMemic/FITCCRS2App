@@ -108,9 +108,11 @@ class _HomePageState extends State<HomePage> {
         if (AuthUser.roles.contains("Takmicar"))
           menuItem(3, "Projekat",
               currentPage == DrawerSections.projekatPrjava ? true : false),
-        menuItem(
+        if (AuthUser.roles.contains("Admin"))
+          menuItem(
             4, "Agenda", currentPage == DrawerSections.agenda ? true : false),
-        menuItem(11, "Pregled Takmicara",
+        if (AuthUser.roles.contains("Sponzor"))
+          menuItem(11, "Pregled Takmicara",
             currentPage == DrawerSections.pregledTakmicara ? true : false),
         menuItem(6, "Moj profil",
             currentPage == DrawerSections.profil ? true : false),
@@ -121,15 +123,11 @@ class _HomePageState extends State<HomePage> {
               currentPage == DrawerSections.pregledProjekataZiri
                   ? true
                   : false),
-        if (AuthUser.roles.contains("Ziri"))
-          menuItem(12, "Pregled agende",
+        menuItem(12, "Pregled agende",
               currentPage == DrawerSections.pregledAgende ? true : false),
         if (AuthUser.roles.contains("Takmicar"))
           menuItem(
               7, "Moj CV", currentPage == DrawerSections.cv ? true : false),
-        if (AuthUser.roles.contains("Ziri"))
-          menuItem(8, "Ocjene",
-              currentPage == DrawerSections.rezultat ? true : false),
         if (AuthUser.roles.contains("Takmicar"))
           menuItem(9, "Pregled prijava",
               currentPage == DrawerSections.pregledtimptojekat ? true : false),
