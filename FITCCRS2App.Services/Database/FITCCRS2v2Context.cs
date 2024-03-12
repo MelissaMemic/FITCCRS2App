@@ -36,13 +36,13 @@ namespace FITCCRS2App.Services.Database
         public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=localhost, 1433;Trusted_Connection=false;MultipleActiveResultSets=False;Encrypt=true;TrustServerCertificate=true;Initial Catalog=RS190039; User Id=SA; Password=Password123");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Data Source=localhost, 1433;Trusted_Connection=false;MultipleActiveResultSets=False;Encrypt=true;TrustServerCertificate=true;Initial Catalog=RS190039; User Id=SA; Password=Password123");
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

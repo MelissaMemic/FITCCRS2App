@@ -1,22 +1,18 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# Use the runtime image for the final stage
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5443
+ENV ASPNETCORE_URLS=http://+:5443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["FITCCRS2App.IdentityServer/FITCCRS2App.IdentityServer.csproj", "FITCCRS2App.IdentityServer/"]
-RUN dotnet restore "FITCCRS2App.IdentityServer/FITCCRS2App.IdentityServer.csproj"
 COPY . .
-WORKDIR "/src/FITCCRS2App.IdentityServer"
-RUN dotnet build "FITCCRS2App.IdentityServer.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FITCCRS2App.IdentityServer.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "FITCCRS2App.IdentityServer.csproj" -c Release -o /app
 
+# Final stage
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "FITCCRS2App.IdentityServer.dll"]
