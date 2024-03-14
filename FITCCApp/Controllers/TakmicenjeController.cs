@@ -1,6 +1,7 @@
 ﻿using FITCCRS2App.Models.Models;
 using FITCCRS2App.Models.RequestObjects;
 using FITCCRS2App.Models.SearchObjects;
+using FITCCRS2App.Services.Services.RabbitMQ;
 using FITCCRS2App.Services.Services.TakmicenjeService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,25 @@ namespace FITCCApp.Controllers
     [Route("[controller]")]
     public class TakmicenjeController : BaseCRUDController<Takmicenje, BaseSearchObject, TakmicenjeUpsertRequest, TakmicenjeUpsertRequest>
     {
-        public TakmicenjeController(ILogger<BaseController<Takmicenje, BaseSearchObject>> logger, ITakmicenjeService service) : base(logger, service)
-        {
+        private readonly ITakmicenjeService _takmicenjeService;
 
+
+        public TakmicenjeController(ITakmicenjeService takmicenjeService, ILogger<BaseController<Takmicenje, BaseSearchObject>> logger, ITakmicenjeService service) : base(logger, service)
+        {
+            _takmicenjeService = takmicenjeService;
+        }
+        [HttpGet("getLastTakmicenje")]
+        public ActionResult<int> GetIntegerValue()
+        {
+            try
+            {
+                int integerValue = _takmicenjeService.GetLastTakmicenjeId();
+                return integerValue;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
         }
 
     }

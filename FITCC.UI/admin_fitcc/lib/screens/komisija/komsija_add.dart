@@ -1,5 +1,8 @@
 import 'package:admin_fitcc/models/paged_result.dart';
 import 'package:admin_fitcc/models/requests/insert_komisija.dart';
+import 'package:admin_fitcc/models/requests/update_komisija.dart';
+import 'package:admin_fitcc/screens/komisija/komisija_list.dart';
+import 'package:admin_fitcc/screens/welcome/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_fitcc/models/komisija.dart';
 import 'package:admin_fitcc/models/enums/ulogeKomisije.dart';
@@ -67,10 +70,8 @@ class _KomisijaAddState extends State<KomisijaAdd> {
         );
 
         await KomisijaProvider().insert(komisija);
-        Navigator.pop(context);
       } else {
-        Komisija komisija = Komisija(
-          widget.komisija!.komisijaId,
+        KomisijaUpdateRequest komisija = KomisijaUpdateRequest(
           imeController.text,
           prezimeController.text,
           emailController.text,
@@ -78,11 +79,18 @@ class _KomisijaAddState extends State<KomisijaAdd> {
               (e) => e.toString() == selectedUlogeKomisije.toString()),
           selectedKategorijaId!,
         );
-        komisija.komisijaId = widget.komisija!.komisijaId;
-        await KomisijaProvider().update(komisija.komisijaId, komisija);
-        Navigator.pop(context);
+        await KomisijaProvider().update(widget.komisija!.komisijaId, komisija);
       }
-    } catch (e) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyHomePage()),
+      (route) => false );
+
+
+    } catch (e) { Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyHomePage()),
+      (route) => false );
       print('Error saving Komisija data: $e');
     }
   }

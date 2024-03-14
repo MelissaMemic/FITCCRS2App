@@ -38,12 +38,14 @@ namespace FITCCRS2App.Services
 
             CreateMap<KriterijUpsertRequest, Database.Kriterij>();
             CreateMap<KomisijaInsertRequest, Database.Komisija>();
+            CreateMap<KomisijaUpdateRequest, Database.Komisija>();
             CreateMap<DogadjajInsertRequest, Database.Dogadjaj>()
                             .ForMember(dest => dest.Agenda, opt => opt.Ignore())
 ;
             CreateMap<DogadjajUpdateRequest, Database.Dogadjaj>();
             CreateMap<RezultatUpsertRequest, Database.Rezultat>();
-            CreateMap<TimUpsertRequest, Database.Tim>();
+            CreateMap<TimUpdateRequest, Database.Tim>();
+            CreateMap<TimInsertRequest, Database.Tim>();
 
 
             CreateMap<Database.Skategorije, Models.Models.SKategorije>();

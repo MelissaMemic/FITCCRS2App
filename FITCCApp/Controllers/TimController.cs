@@ -7,7 +7,7 @@ using FITCCRS2App.Services.Services.TimService;
 
 namespace FITCCApp.Controllers
 {
-    public class TimController : BaseCRUDController<Tim, BaseSearchObject, TimUpsertRequest, TimUpsertRequest>
+    public class TimController : BaseCRUDController<Tim, BaseSearchObject, TimInsertRequest, TimUpdateRequest>
     {
         public TimController(ILogger<BaseController<Tim, BaseSearchObject>> logger, ITimService service) : base(logger, service)
         {

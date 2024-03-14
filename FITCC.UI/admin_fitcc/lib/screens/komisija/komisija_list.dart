@@ -87,16 +87,17 @@ class _KomisijaListState extends State<KomisijaList> {
           Expanded(
             child: DataTable(
               columns: [
-                DataColumn(label: Text('Projekat Naziv')),
-                DataColumn(label: Text('Napomena')),
-                DataColumn(label: Text('Bod')),
+                DataColumn(label: Text('Ime i prezime')),
+                DataColumn(label: Text('Email')),
+                DataColumn(label: Text('Rola')),
+                DataColumn(label: Text(' ')),
                 DataColumn(label: Text(' ')),
               ],
               rows: filteredKomisijaList.map((rezultat) {
                 return DataRow(cells: [
-                  DataCell(Text(rezultat.ime)),
-                  DataCell(Text(rezultat.prezime)),
+                  DataCell(Text('${rezultat.ime} ${rezultat.prezime}'),),
                   DataCell(Text(rezultat.email.toString())),
+                  DataCell(Text(rezultat.role.name)),
                   DataCell(
                     ElevatedButton(
                       onPressed: () {
@@ -104,6 +105,15 @@ class _KomisijaListState extends State<KomisijaList> {
                       },
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                       child: Text('Izbrisi'),
+                    ),
+                  ),
+                   DataCell(
+                    ElevatedButton(
+                      onPressed: () {
+                        _editKomisija(rezultat);
+                      },
+                      style: ElevatedButton.styleFrom(primary: Colors.blue),
+                      child: Text('Uredi'),
                     ),
                   ),
                 ]);

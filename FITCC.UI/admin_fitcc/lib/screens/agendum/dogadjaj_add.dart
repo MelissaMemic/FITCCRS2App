@@ -6,6 +6,7 @@ import 'package:admin_fitcc/models/requests/update_dogadjaj.dart';
 import 'package:admin_fitcc/providers/agenda_provider.dart';
 import 'package:admin_fitcc/providers/dogadjaj_provider.dart';
 import 'package:admin_fitcc/screens/agendum/agendum.dart';
+import 'package:admin_fitcc/screens/welcome/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -80,30 +81,32 @@ class _DogadjajAddState extends State<DogadjajAdd> {
 
         await DogadjajProvider()
             .update(widget.dogadjaj!.dogadjajId, updateObject);
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DogadjajList()),
-        );
       } else {
         DogadjajInsertRequest insertObject = DogadjajInsertRequest(
           nazivController.text,
           int.parse(trajanjeController.text),
-          DateTime.now(),
-          DateTime.now(),
+          _parseDate(pocetakController.text),
+          _parseDate(krajController.text),
           napomenaController.text,
           selectedAgendaId!,
           lokacijaController.text,
         );
 
         await DogadjajProvider().insert(insertObject);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DogadjajList()),
-        );
       }
+          await _fetchAgendaList();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyHomePage()),
+      (route) => false );
+
     } catch (e) {
       print('Error inserting/updating Dogadjaj data: $e');
+      await _fetchAgendaList();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MyHomePage()),
+      (route) => false );
     }
   }
 
@@ -195,7 +198,7 @@ class _DogadjajAddState extends State<DogadjajAdd> {
                   onPressed: () => _selectDateTime(context, pocetakController),
                 ),
               ),
-              readOnly: true, // To prevent manual editing
+              readOnly: true, 
             ),
             SizedBox(height: 16),
             TextFormField(
@@ -207,7 +210,7 @@ class _DogadjajAddState extends State<DogadjajAdd> {
                   onPressed: () => _selectDateTime(context, krajController),
                 ),
               ),
-              readOnly: true, // To prevent manual editing
+              readOnly: true, 
             ),
             SizedBox(height: 16),
             ElevatedButton(
