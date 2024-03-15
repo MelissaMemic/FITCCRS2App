@@ -15,26 +15,31 @@ builder.Services.AddAutoMapper(typeof(IAgendaService));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FITCCRS2v2Context>(options =>
-    options.UseSqlServer(connectionString)
-    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+   options.UseSqlServer(connectionString)
+   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
 builder.UseSerilog();
 
 builder.Services.AddIdentityServer()
-    .AddDeveloperSigningCredential()
-    .AddInMemoryApiScopes(new List<ApiScope> { new ApiScope() })
-    .AddInMemoryClients(new List<Client> { new Client() });
+   .AddDeveloperSigningCredential()
+   .AddInMemoryApiScopes(new List<ApiScope> { new ApiScope() })
+   .AddInMemoryClients(new List<Client> { new Client() });
+
+
 builder.Services.AddTransient<IService<FITCCRS2App.Models.Models.Takmicenje, BaseSearchObject>, BaseService<FITCCRS2App.Models.Models.Takmicenje
-    , Takmicenje, BaseSearchObject>>();
+   , Takmicenje, BaseSearchObject>>();
 builder.Services.AddTransient<ITakmicenjeService, TakmicenjeService>();
 builder.Services.AddTransient<IAgendaService, AgendaService>();
 builder.Services.AddTransient<IUserService, UserService>();
+
+
+
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+//app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseIdentityServer();
 app.MapControllers();

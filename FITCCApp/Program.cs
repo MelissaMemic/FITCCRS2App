@@ -19,28 +19,15 @@ using FITCCRS2App.Services.Services.DogadjajService;
 using FITCCRS2App.Services.Services.TimService;
 using FITCCRS2App.Services.Services.SponzorService;
 using FITCCRS2App.Services.Services.RabbitMQ;
+using System;
+using Microsoft.OpenApi.Models;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<FITCCRS2v2Context>(options =>
-    options.UseSqlServer(connectionString));
-
-Log.Logger = new LoggerConfiguration()
-            .ReadFrom
-            .Configuration(builder.Configuration)
-            .CreateLogger();
-
-builder.Host.UseSerilog();
-
-builder.Services.AddMemoryCache();
-
-
 builder.Services.AddTransient<IService<FITCCRS2App.Models.Models.Takmicenje, BaseSearchObject>, BaseService<FITCCRS2App.Models.Models.Takmicenje
-    , Takmicenje, BaseSearchObject>>();
+   , Takmicenje, BaseSearchObject>>();
 builder.Services.AddTransient<ITakmicenjeService, TakmicenjeService>();
 builder.Services.AddTransient<IAgendaService, AgendaService>();
 builder.Services.AddTransient<IKriterijService, KriterijService>();
@@ -54,37 +41,110 @@ builder.Services.AddTransient<ITimService, TimService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 
-//builder.Services.AddScopedNotificationServices();
-
-builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.AddControllers(x =>
 {
     x.Filters.Add<ErrorFilter>();
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => {
+    c.AddSecurityDefinition("basicAuth", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+    {
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "Basic"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
+   {
+       {
+           new OpenApiSecurityScheme
+           {
+               Reference = new OpenApiReference{ Type = ReferenceType.SecurityScheme, Id ="basicAuth"}
+           },
+           new string[]{}
+       }
+   });
+});
+
+
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<FITCCRS2v2Context>(options =>
+   options.UseSqlServer(connectionString));
+
+
+
+
+Log.Logger = new LoggerConfiguration()
+           .ReadFrom
+           .Configuration(builder.Configuration)
+           .CreateLogger();
+
+builder.Host.UseSerilog();
+
+builder.Services.AddMemoryCache();
+
+
+
+//builder.Services.AddScopedNotificationServices();
+
+builder.Services.AddAuthentication(builder.Configuration);
+
+
+
+
+//builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 var app = builder.Build();
 
-app.UseSwaggerUI();
 
-app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+//app.UseSwagger();
+//app.UseSwaggerUI();
+
+////app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+//app.UseHttpsRedirection();
+
+//app.UseAuthentication();
+//app.UseAuthorization();
+
+//app.MapControllers();
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<FITCCRS2v2Context>();
-    dataContext.Database.Migrate();
+
+
+    var conn = dataContext.Database.GetConnectionString();
+
+    await dataContext.Database.MigrateAsync();
+
+    dataContext.Database.EnsureCreated();
+
 }
 
-app.Run();
 
+app.Run();
