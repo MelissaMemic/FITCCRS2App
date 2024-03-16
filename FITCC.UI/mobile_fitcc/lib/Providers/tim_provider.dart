@@ -11,7 +11,7 @@ class TimProvider extends BaseProvider<Tim> {
   }
 
   Future<List<Tim>> fetchTimoviList() async {
-    var url = Uri.parse("https://localhost:7247/api/Tim/getLast");
+    var url = Uri.parse("http://localhost:7247/api/Tim/getLast");
 
     Map<String, String> headers = createHeaders();
 
@@ -25,7 +25,7 @@ class TimProvider extends BaseProvider<Tim> {
     }
   }
    Future<List<Tim>> getAllTimData({String? searchText}) async {
-    var url = Uri.parse("https://localhost:7247/api/Tim/getAllTimData");
+    var url = Uri.parse("http://localhost:7247/api/Tim/getAllTimData");
 
     Map<String, String> headers = createHeaders();
 

@@ -12,7 +12,7 @@ class   SponzorProvider extends BaseProvider<Sponzor> {
     return Sponzor.fromJson(data);
   }
 Future<bool> sendContactEmail(Map<String, dynamic> emailData) async {
-  var url = Uri.parse('https://localhost:7247/SponzorTakmicar/SendConfirmationEmail');
+  var url = Uri.parse('http://localhost:7247/SponzorTakmicar/SendConfirmationEmail');
     Map<String, String> headers = createHeaders();
   var body = json.encode({
     'sender': emailData['sender'],

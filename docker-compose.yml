@@ -27,33 +27,34 @@ services:
       - fitnetwork
  
   rabbitmq-service:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: RabbitMQConsumer/Dockerfile
     environment:
-      RABBITMQ_HOST: "rabbitmq"
-      RABBITMQ_PORT: "5672"
-      RABBITMQ_USERNAME: "guest"
-      RABBITMQ_PASSWORD: "guest"
-      SMTP_SERVER: "smtp.gmail.com"
-      SMTP_PORT: "587"
-      SMTP_USERNAME: "mellimostar@gmail.com"
-      SMTP_PASSWORD: "ttydocdytcokyeru"
-      API_HOST: "localhost"
-      API_PORT: "7247"
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - SMTP_SERVER=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=mellimostar@gmail.com
+      - SMTP_PASSWORD=ttydocdytcokyeru
+      - API_HOST=localhost
+      - API_PORT=7247
     depends_on:
       - rabbitmq
       - fitccrs2app-api
       - sql
     networks:
       - fitnetwork
- 
+      
   fitccrs2app-api:
     build:
       context: .
       dockerfile: FITCCApp/Dockerfile
     environment:
-      - ConnectionStrings:DefaultConnection=Server=sql,1433;Database=RS190039;User=sa;Password=Pass123!!;TrustServerCertificate=True;
+      - ConnectionStrings:DefaultConnection=Server=sql,1433;Database=RS190039;User=sa;Password=Pass123!!;TrustServerCertificate=True;ConnectRetryCount=0
       - ASPNETCORE_ENVIRONMENT=Development
       # - ASPNETCORE_URLS=https://+;http://+
       # - ASPNETCORE_HTTPS_PORT=7247
@@ -82,7 +83,6 @@ services:
     depends_on:
       - sql
       - rabbitmq
-      - rabbitmq-service
       - identityserver
  
   identityserver:

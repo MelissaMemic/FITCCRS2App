@@ -11,7 +11,7 @@ class NapomenaProvider extends BaseProvider<Napomena> {
     return Napomena.fromJson(data);
   }
 Future<bool> sendContactEmail(Map<String, dynamic> emailData) async {
-  var url = Uri.parse('https://localhost:7247/api/Napomena/SendContactEmail');
+  var url = Uri.parse('http://localhost:7247/api/Napomena/SendContactEmail');
   var headers = {'Content-Type': 'application/json'};
   var body = json.encode({
     'from': emailData['sender'],

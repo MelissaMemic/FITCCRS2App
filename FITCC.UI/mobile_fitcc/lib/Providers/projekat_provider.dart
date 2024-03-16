@@ -11,7 +11,7 @@ class ProjekatProvider extends BaseProvider<Projekat> {
   }
 
   Future<List<Projekat>> fetchProjekatiList() async {
-    var url = Uri.parse("https://localhost:7247/api/Projekat");
+    var url = Uri.parse("http://localhost:7247/api/Projekat");
 
     Map<String, String> headers = createHeaders();
 

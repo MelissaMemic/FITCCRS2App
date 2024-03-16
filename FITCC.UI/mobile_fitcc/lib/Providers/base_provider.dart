@@ -16,7 +16,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   BaseProvider(String endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://127.0.0.1:7247");
+        defaultValue: "http://127.0.0.1:7247");
 
     if (_baseUrl.endsWith("/") == false) {
       _baseUrl = _baseUrl + "/";
@@ -36,7 +36,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
 
     var uri = Uri.parse(url);
-
+print(AuthUser.token);
     Map<String, String> headers = getHeaders();
 
     var response = await http!.get(uri, headers: headers);
@@ -97,6 +97,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
 
     var uri = Uri.parse(url);
+print(AuthUser.token);
 
     Map<String, String> headers = getHeaders();
 

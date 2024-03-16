@@ -13,7 +13,7 @@ class AuthProvider with ChangeNotifier {
   AuthProvider() {
     _baseUrl = const String.fromEnvironment(
       "IdentityServerUrl",
-      defaultValue: "https://127.0.0.1:5001/",
+      defaultValue: "http://127.0.0.1:5001/",
     );
   }
 
