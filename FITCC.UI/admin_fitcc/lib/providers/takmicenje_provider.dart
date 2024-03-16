@@ -12,7 +12,7 @@ class TakmicenjeProvider extends BaseProvider<Takmicenje> {
   }
 
   Future<int> getLastTakmicenje() async {
-    var url = Uri.parse("https://localhost:7247/Takmicenje/getLastTakmicenje");
+    var url = Uri.parse("http://localhost:7247/Takmicenje/getLastTakmicenje");
 
     Map<String, String> headers = createHeaders();
 

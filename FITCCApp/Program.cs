@@ -19,10 +19,6 @@ using FITCCRS2App.Services.Services.DogadjajService;
 using FITCCRS2App.Services.Services.TimService;
 using FITCCRS2App.Services.Services.SponzorService;
 using FITCCRS2App.Services.Services.RabbitMQ;
-using System;
-using Microsoft.OpenApi.Models;
-using System.Security.Principal;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,28 +45,7 @@ builder.Services.AddControllers(x =>
 
 
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(c => {
-    c.AddSecurityDefinition("basicAuth", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
-    {
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
-        Scheme = "Basic"
-    });
-
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
-   {
-       {
-           new OpenApiSecurityScheme
-           {
-               Reference = new OpenApiReference{ Type = ReferenceType.SecurityScheme, Id ="basicAuth"}
-           },
-           new string[]{}
-       }
-   });
-});
-
-
-
+builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -89,42 +64,14 @@ builder.Host.UseSerilog();
 
 builder.Services.AddMemoryCache();
 
-
-
-//builder.Services.AddScopedNotificationServices();
-
 builder.Services.AddAuthentication(builder.Configuration);
-
-
-
 
 //builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 var app = builder.Build();
 
-
-//app.UseSwagger();
-//app.UseSwaggerUI();
-
-////app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthentication();
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-
-app.UseSwagger();
 app.UseSwaggerUI();
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
@@ -136,15 +83,10 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<FITCCRS2v2Context>();
-
-
     var conn = dataContext.Database.GetConnectionString();
-
     await dataContext.Database.MigrateAsync();
-
     dataContext.Database.EnsureCreated();
 
 }
-
 
 app.Run();

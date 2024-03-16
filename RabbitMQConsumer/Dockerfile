@@ -11,4 +11,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
  
-ENTRYPOINT ["dotnet", "RabbitMQConsumer.csproj.dll"]
+ENTRYPOINT ["dotnet", "RabbitMQConsumer.dll"]

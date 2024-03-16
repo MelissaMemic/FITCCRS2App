@@ -39,7 +39,7 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-//app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseIdentityServer();
 app.MapControllers();

@@ -2,16 +2,24 @@
 using RabbitMQ.Client.Events;
 using RabbitMQConsumer;
 using System.Text;
+Console.WriteLine($"Application started");
+
 var factory = new ConnectionFactory
 {
-    HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost",
+    HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "rabbitMQ",
     Port = int.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672"),
     UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest",
     Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest",
 };
+Console.WriteLine(Environment.GetEnvironmentVariable("RABBITMQ_HOST"));
+Console.WriteLine(Environment.GetEnvironmentVariable("RABBITMQ_PORT"));
+Console.WriteLine(Environment.GetEnvironmentVariable("RABBITMQ_USERNAME"));
+Console.WriteLine(Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD"));
+
 factory.ClientProvidedName = "Rabbit Test Consumer";
 IConnection connection = factory.CreateConnection();
 IModel channel = connection.CreateModel();
+Console.WriteLine($"Application connected");
 
 string exchangeName = "EmailExchange";
 string routingKey = "email_queue";

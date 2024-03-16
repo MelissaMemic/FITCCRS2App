@@ -11,7 +11,7 @@ class DogadjajPerAgendaProvider extends BaseProvider<DogadjajiPerAgenda> {
   }
 
   Future<List<DogadjajiPerAgenda>> getAllDogadjaji() async {
-    var url = Uri.parse("https://localhost:7247/Agenda/getAllDogadjaji");
+    var url = Uri.parse("http://localhost:7247/Agenda/getAllDogadjaji");
 
     Map<String, String> headers = createHeaders();
 
