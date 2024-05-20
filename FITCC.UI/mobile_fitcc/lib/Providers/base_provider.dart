@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:http/io_client.dart';
+import 'package:http/http.dart';
 import 'package:mobile_fitcc/Models/auth_user.dart';
 import 'package:mobile_fitcc/Models/paged_result.dart';
 
@@ -36,10 +36,11 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
 
     var uri = Uri.parse(url);
-print(AuthUser.token);
-    Map<String, String> headers = getHeaders();
+    print(AuthUser.token);
 
-    var response = await http!.get(uri, headers: headers);
+    Map<String, String> headers = createHeaders(); 
+
+    var response = await http!.get(uri, headers: headers); 
 
     if (isValidResponseCode(response)) {
       var data = jsonDecode(response.body);
@@ -97,7 +98,7 @@ print(AuthUser.token);
     }
 
     var uri = Uri.parse(url);
-print(AuthUser.token);
+    print(AuthUser.token);
 
     Map<String, String> headers = getHeaders();
 
@@ -134,13 +135,13 @@ print(AuthUser.token);
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else if (response.statusCode == 400){
-    var data = jsonDecode(response.body);
-    throw Exception(data['message']);
-    }else {
-    throw Exception('Failed to create object');
+      var data = jsonDecode(response.body);
+      throw Exception(data['message']);
+    } else {
+      throw Exception('Failed to create object');
+    }
   }
 
-  }
   dynamic myDateSerializer(dynamic object) {
     if (object is DateTime) {
       return object.toIso8601String();
@@ -208,10 +209,7 @@ print(AuthUser.token);
     return query;
   }
 
-  Map<String, String> getHeaders() => {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer ${AuthUser.token ?? ""}"
-      };
+  Map<String, String> getHeaders() => createHeaders();
 
   bool isValidResponseCode(Response response) {
     if (response.statusCode == 200) {
